@@ -1,0 +1,39 @@
+<div class="player">
+  <mat-toolbar color="secondary">
+    <mat-toolbar-row>
+      <span>Second Line</span>
+      <span class="example-spacer"></span>
+    </mat-toolbar-row>
+
+    <mat-toolbar-row>
+
+      <div class="shuffle">
+        <button mat-icon-button aria-label="Example icon button with a vertical three dot icon">
+          <mat-icon *ngIf="!shuffled" class="example-icon" aria-hidden="false" aria-label="Example user verified icon">shuffle</mat-icon>
+          <mat-icon *ngIf="shuffled" class="example-icon" aria-hidden="false" aria-label="Example user verified icon">shuffle_on</mat-icon>
+        </button>
+      </div>
+
+      <div class="controls">
+        <button mat-icon-button aria-label="Example icon button with a vertical three dot icon">
+          <mat-icon class="example-icon" aria-hidden="false" aria-label="Example user verified icon">skip_previous</mat-icon>
+        </button>
+        <button mat-icon-button aria-label="Example icon button with a vertical three dot icon">
+          <mat-icon *ngIf="!paused" class="example-icon" aria-hidden="false" aria-label="Example user verified icon">play_circle</mat-icon>
+          <mat-icon *ngIf="paused" class="example-icon" aria-hidden="false" aria-label="Example user verified icon">pause_circle</mat-icon>
+        </button>
+        <button mat-icon-button aria-label="Example icon button with a vertical three dot icon">
+          <mat-icon class="example-icon" aria-hidden="false" aria-label="Example user verified icon">skip_next</mat-icon>
+        </button>
+      </div>
+
+      <div class="playlist">
+        <button mat-icon-button aria-label="Example icon button with a vertical three dot icon">
+          <mat-icon class="example-icon" aria-hidden="false" aria-label="Example user verified icon">playlist_add</mat-icon>
+        </button>
+      </div>
+
+
+    </mat-toolbar-row>
+  </mat-toolbar>
+</div>
