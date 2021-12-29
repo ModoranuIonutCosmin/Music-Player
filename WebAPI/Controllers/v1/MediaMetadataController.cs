@@ -11,9 +11,10 @@ namespace WebAPI.Controllers.v1
     {
         public MediaMetadataController(IMediator mediator) : base(mediator)
         {
+
         }
 
-        [HttpPost]
+        [HttpPost("createAlbum")]
         [Authorize]
         public async Task<IActionResult> AddNewAlbumMetadata([FromBody] AlbumModel album)
         {
@@ -23,6 +24,15 @@ namespace WebAPI.Controllers.v1
             {
                 AlbumModel = album,
                 Owner = requestingUser,
+            }));
+        }
+
+        [HttpGet("album")]
+        public async Task<IActionResult> GetAlbumMetadata([FromQuery] GetAlbumDetailedInfoCommand album)
+        {
+            return Ok(await mediator.Send<AlbumResponseDTO>(new GetAlbumDetailedInfoCommand
+            {
+                AlbumId = album.AlbumId,
             }));
         }
     }

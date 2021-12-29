@@ -29,12 +29,10 @@ namespace WebAPI.Controllers.v1
                 AccessKey = configuration["AWSAccessKey"],
                 Bucket = configuration["DefaultBucket"],
                 SecretKey = configuration["AWSSecretKey"],
-                UserRequestingId = (Request.HttpContext.Items["User"] as ApplicationUser).Id
+                UserRequestingId = (Request.HttpContext.Items["User"] as Domain.Entities.ApplicationUser).Id
             };
 
             return Ok(await mediator.Send(uploadRequest));
         }
-
-        
     }
 }

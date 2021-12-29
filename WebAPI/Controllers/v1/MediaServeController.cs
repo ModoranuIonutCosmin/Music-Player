@@ -15,9 +15,9 @@ public class MediaServeController : BaseController
     }
 
     [HttpGet]
-    public IActionResult GetMediaUrl(Guid songId)
+    public async Task<IActionResult> GetMediaUrl(Guid songId)
     {
-        return Ok(mediator.Send(new GetMediaFileUrlCommand()
+        return Ok(await mediator.Send(new GetMediaFileUrlCommand()
         {
             SongId = songId,
             Bucket = configuration["DefaultBucket"],
