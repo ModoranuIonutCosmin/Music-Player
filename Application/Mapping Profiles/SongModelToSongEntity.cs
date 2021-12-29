@@ -8,7 +8,7 @@ namespace Application.Mapping_Profiles
     {
         public SongModelToSongEntity()
         {
-            CreateMap<SongModel, Song>();
+            CreateMap<SongModel, Song>().ReverseMap();
         }
     }
 }

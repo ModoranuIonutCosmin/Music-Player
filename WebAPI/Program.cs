@@ -12,6 +12,7 @@ using Persistence.AWS;
 using System.Net;
 using System.Reflection;
 using System.Text;
+using System.Text.Json.Serialization;
 using WebAPI.Exceptions.ProblemDetailsHelpers;
 using WebAPI.Middleware;
 
@@ -124,6 +125,7 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 });
+
 
 var app = builder.Build();
 

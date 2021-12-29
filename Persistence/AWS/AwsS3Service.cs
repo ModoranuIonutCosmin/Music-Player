@@ -3,12 +3,14 @@ using Amazon.S3;
 using Amazon.S3.Model;
 using Amazon.S3.Transfer;
 using Application.Interfaces;
+using Domain.Models;
 
 namespace Persistence.AWS
 {
     public class AwsS3Service : IRemoteDiskStorageService
     {
-        private AmazonS3Client SetupClient(string awsAccessKey, string awsSecretKey)
+        private static readonly TimeSpan PRESIGNED_MEDIA_URL_EXPIRY_TIME = TimeSpan.FromDays(2);
+        private static AmazonS3Client SetupClient(string awsAccessKey, string awsSecretKey)
         {
             var credentials = new BasicAWSCredentials(awsAccessKey, awsSecretKey);
             var config = new AmazonS3Config
@@ -19,23 +21,29 @@ namespace Persistence.AWS
             return new AmazonS3Client(credentials, config);
         }
 
-        public string PresignMediaUrl(string resourceKey, string format, string bucket, string awsAccessKey, string awsSecretKey)
+        public ResourceUrlResponse PresignMediaUrl(string resourceKey, string format, string bucket, string awsAccessKey, string awsSecretKey)
         {
             using var client = SetupClient(awsAccessKey, awsSecretKey);
+
+            DateTime expirationDate = DateTime.UtcNow.Add(PRESIGNED_MEDIA_URL_EXPIRY_TIME);
 
             var url = client.GetPreSignedURL(new GetPreSignedUrlRequest()
             {
                 BucketName = bucket,
                 Key = resourceKey,
-                Expires = DateTime.UtcNow.AddDays(2),
+                Expires = expirationDate,
             });
 
-            return url;
+            return new()
+            {
+                Expires = expirationDate,
+                Url = url
+            };
         }
 
-        public async Task UploadSmallFile(MemoryStream fileStream, string fileName, string bucket, string awsAccessKey, string awsSecretKey)
+        public async Task UploadSmallFile(MemoryStream fileStream, string fileName, string bucket, string awsAccessKey,
+            string awsSecretKey)
         {
-
             using var client = SetupClient(awsAccessKey, awsSecretKey);
             var uploadRequest = new TransferUtilityUploadRequest
             {

@@ -171,6 +171,9 @@ namespace Persistence.Migrations
                     b.Property<Guid?>("AlbumId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<long>("Length")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -179,16 +182,11 @@ namespace Persistence.Migrations
                     b.Property<Guid?>("PlaylistId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("StorageId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
                     b.HasIndex("AlbumId");
 
                     b.HasIndex("PlaylistId");
-
-                    b.HasIndex("StorageId");
 
                     b.ToTable("Songs");
                 });
@@ -199,22 +197,31 @@ namespace Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Extension")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
                     b.Property<string>("Path")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)");
 
                     b.Property<long>("Size")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("SongId")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid>("SongId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Url")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)");
 
                     b.Property<DateTimeOffset>("UrlExpiration")
                         .HasColumnType("datetimeoffset");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("SongId")
+                        .IsUnique();
 
                     b.ToTable("StorageInfo");
                 });
@@ -277,13 +284,16 @@ namespace Persistence.Migrations
                         .WithMany("Songs")
                         .HasForeignKey("PlaylistId");
 
-                    b.HasOne("Domain.Entities.Storage", "Storage")
-                        .WithMany()
-                        .HasForeignKey("StorageId");
-
                     b.Navigation("Album");
+                });
 
-                    b.Navigation("Storage");
+            modelBuilder.Entity("Domain.Entities.Storage", b =>
+                {
+                    b.HasOne("Domain.Entities.Song", null)
+                        .WithOne("Storage")
+                        .HasForeignKey("Domain.Entities.Storage", "SongId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Domain.Entities.Album", b =>
@@ -294,6 +304,11 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.Entities.Playlist", b =>
                 {
                     b.Navigation("Songs");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Song", b =>
+                {
+                    b.Navigation("Storage");
                 });
 #pragma warning restore 612, 618
         }
