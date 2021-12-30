@@ -16,6 +16,7 @@ namespace Persistence.v1
             return await context.Albums.Where(e => e.Id == albumId)
                 .Include(e => e.Songs)
                     .ThenInclude(e => e.Artists)
+                .Include(e => e.Artists)
                 .SingleOrDefaultAsync();
         }
 

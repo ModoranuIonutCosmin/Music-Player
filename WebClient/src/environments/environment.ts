@@ -10,7 +10,8 @@ export const environment = {
 export enum ApiPaths {
   loginService = "/login",
   registerService = "/register",
-  mediaService = "/media"
+  mediaService = "/media",
+  albumInfoGet = "/mediaMetadata/album"
 }
 
 /*

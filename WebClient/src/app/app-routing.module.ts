@@ -9,6 +9,10 @@ const routes: Routes = [
   {
     path: 'dashboard',
     loadChildren: () => import('./modules/dashboard/dashboard.module').then(m => m.DashboardModule)
+  },
+  {
+    path: 'album',
+    loadChildren: () => import('./modules/sound/sound.module').then(m => m.SoundModule)
   }
 ];
 
