@@ -9,7 +9,7 @@ namespace Domain.Entities
         [Required]
         [MaxLength(100)]
         public string Name { get; set; }
-        [MaxLength(100)]
+        [MaxLength(1000)]
         public string Description { get; set; }
         public string CoverImageUrl { get; set; }
         public DateTimeOffset ReleaseDate { get; set; }
