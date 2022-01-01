@@ -1,0 +1,52 @@
+
+<main>
+  <mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+    <ng-container matColumnDef="position">
+      <mat-header-cell *matHeaderCellDef> No.</mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <ng-container *ngIf="element.position != this.highlightedElementIndex">
+          {{element.position}}
+        </ng-container>
+
+        <button *ngIf="element.position == this.highlightedElementIndex"
+                (click)="songPlayed(element)"
+                mat-icon-button aria-label="Play button">
+          <mat-icon>play_arrow</mat-icon>
+        </button>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="coverImg">
+      <div>
+        <mat-header-cell *matHeaderCellDef> No.</mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <img src="{{element.coverImageUrl}}" class="coverImage"/>
+        </mat-cell>
+      </div>
+    </ng-container>
+
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef> Name</mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="length">
+      <mat-header-cell *matHeaderCellDef> Length</mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element?.formattedLength}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="controls">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let element" width="1px">
+      </td>
+    </ng-container>
+
+    <mat-row *matRowDef="let row; columns: displayedColumns;"
+             (mouseover)="this.highlightedElementIndex = row.position"
+             (mouseleave)="this.highlightedElementIndex = -1"
+    >
+
+    </mat-row>
+  </mat-table>
+</main>
+

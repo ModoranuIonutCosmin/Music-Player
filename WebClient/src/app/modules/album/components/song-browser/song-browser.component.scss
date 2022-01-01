@@ -1,0 +1,40 @@
+main {
+  height: 100%;
+}
+
+mat-table {
+  height: 100%;
+}
+
+mat-cell{
+  width: 100%;
+  height: 100%;
+  color: inherit;
+}
+
+.mat-column-position {
+  width: 100%;
+  justify-content: center;
+}
+
+.mat-column-name{
+  flex: 0 0 80%;
+}
+.mat-column-coverImg{
+  margin: 0 15px 0 0;
+}
+
+.coverImage{
+  max-width: 40px;
+}
+
+mat-row {
+  color: limegreen;
+}
+
+mat-row:hover {
+  background-color: limegreen;
+  color: white;
+}
+
+

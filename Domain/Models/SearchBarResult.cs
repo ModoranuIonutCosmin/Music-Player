@@ -4,10 +4,7 @@ namespace Domain.Models
 {
     public class SearchBarResult
     {
-        public Guid Id { get; set; }
-
-        public MediaFileType Type { get; set; }
-
-        public string Name { get; set; }
+        public List<SongResponseDTO> Songs { get; set; }
+        public List<AlbumResponseDTO> Albums { get; set; }
     }
 }

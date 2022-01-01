@@ -61,9 +61,12 @@ namespace Persistence.Migrations
                     b.Property<string>("CoverImageUrl")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTimeOffset>("DateAdded")
+                        .HasColumnType("datetimeoffset");
+
                     b.Property<string>("Description")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -170,6 +173,14 @@ namespace Persistence.Migrations
 
                     b.Property<Guid?>("AlbumId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CoverImageUrl")
+                        .IsRequired()
+                        .HasMaxLength(1024)
+                        .HasColumnType("nvarchar(1024)");
+
+                    b.Property<DateTimeOffset>("DateAdded")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<long>("Length")
                         .HasColumnType("bigint");

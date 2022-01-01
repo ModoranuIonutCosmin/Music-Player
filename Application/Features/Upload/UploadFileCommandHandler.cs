@@ -86,6 +86,7 @@ namespace Application.Features.Upload
                 });
 
                 await songRepository.SetSongDuration(newSongId, audioFileProperties?.Properties?.Duration.Ticks ?? 0);
+                await songRepository.SetSongDateAdded(newSongId, DateTimeOffset.UtcNow);
             }
 
             finally

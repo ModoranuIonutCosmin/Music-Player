@@ -1,0 +1,16 @@
+<main>
+  <section>
+    <div class = "cover">
+      <img src = "{{dataSource?.coverImageUrl}}" alt = "song details"/>
+    </div>
+    <div class = "infoPanel">
+      <header>
+        <h1>{{dataSource?.name}}</h1>
+      </header>
+
+      <h2>Contributing artists</h2>
+      <p *ngFor="let artist of dataSource?.artists">{{artist.artistName}}</p>
+    </div>
+  </section>
+</main>
+

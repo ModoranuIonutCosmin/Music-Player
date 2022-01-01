@@ -1,5 +1,6 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
+import {AudioService} from "./core/services/music player/audio.service";
 
 const routes: Routes = [
   {
@@ -12,12 +13,21 @@ const routes: Routes = [
   },
   {
     path: 'album',
-    loadChildren: () => import('./modules/sound/sound.module').then(m => m.SoundModule)
+    loadChildren: () => import('./modules/album/album.module').then(m => m.AlbumModule)
+  },
+  {
+    path: 'song',
+    loadChildren: () => import('./modules/song/song.module').then(m => m.SongModule)
+  },
+  {
+    path: 'search',
+    loadChildren: () => import('./modules/search-results/search-results.module').then(m => m.SearchResultsModule)
   }
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {
+}

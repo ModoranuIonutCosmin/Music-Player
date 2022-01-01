@@ -1,5 +1,7 @@
 ﻿using Application.Interfaces;
+using AutoMapper;
 using Domain.Datamodels;
+using Domain.Entities;
 using MediatR;
 
 namespace Domain.Models
@@ -8,38 +10,34 @@ namespace Domain.Models
     {
         private readonly IAlbumRepository albumRepository;
         private readonly ISongRepository songRepository;
+        private readonly IMapper mapper;
 
         public SearchMediaCommandHandler(IAlbumRepository albumRepository,
-            ISongRepository songRepository)
+            ISongRepository songRepository, IMapper mapper)
         {
             this.albumRepository = albumRepository;
             this.songRepository = songRepository;
+            this.mapper = mapper;
         }
 
         public async Task<SearchBarResultsResponse> Handle(SearchMediaCommand request, CancellationToken cancellationToken)
         {
-            var searchResults = (await songRepository
-                .GetSongByNameSimilarity(request.Query))
-                .Select(e => new SearchBarResult
-                {
-                    Id = e.Id,
-                    Name = e.Name,
-                    Type = MediaFileType.Song
-                }).ToList();
+            var songResults = (await songRepository
+                .GetSongByNameSimilarity(request.Query, request.Count, request.Page))
+                .ToList();
 
-            searchResults.AddRange((await albumRepository
-                .GetAlbumsByNameSimilarity(request.Query))
-                .Select(e => new SearchBarResult
-                {
-                    Id = e.Id,
-                    Name = e.Name,
-                    Type = MediaFileType.Album
-                }));
+            var albumResults = (await albumRepository
+                .GetAlbumsByNameSimilarity(request.Query, request.Count, request.Page))
+                .ToList();
 
             return new()
             {
                 Query = request.Query,
-                Results = searchResults
+                Results = new SearchBarResult
+                {
+                    Albums = mapper.Map<List<Album>, List<AlbumResponseDTO>>(albumResults),
+                    Songs = mapper.Map <List<Song>, List<SongResponseDTO>>(songResults)
+                }
             };
         }
     }

@@ -22,10 +22,32 @@ namespace Persistence.v1
             return song;
         }
 
-        public async Task<List<Song>> GetSongByNameSimilarity(string name)
+        public async Task<List<Song>> GetSongByNameSimilarity(string name, int count = int.MaxValue, int page = 0)
         {
             return await context.Songs.Where(e => e.Name.ToLower().Contains(name))
+                .OrderBy(e => e.DateAdded)
+                .Skip(page * count)
+                .Take(count)
                 .ToListAsync();
+        }
+
+        public async Task<Song> SetSongDateAdded(Guid songId, DateTimeOffset dateAdded)
+        {
+            var song = await GetByIdAsync(songId);
+
+            song.DateAdded = dateAdded;
+
+            await context.SaveChangesAsync();
+
+            return song;
+        }
+
+        public async Task<Song> LoadSongRelatedData(Guid songId)
+        {
+            return await context.Songs
+                .Include(e => e.Artists)
+                .SingleOrDefaultAsync(e => e.Id.Equals(songId));
+
         }
     }
 }
