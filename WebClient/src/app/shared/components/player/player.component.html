@@ -18,9 +18,9 @@
         <button mat-icon-button aria-label="Example icon button with a vertical three dot icon">
           <mat-icon class="example-icon" aria-hidden="false" aria-label="Example user verified icon">skip_previous</mat-icon>
         </button>
-        <button mat-icon-button aria-label="Example icon button with a vertical three dot icon">
-          <mat-icon *ngIf="!paused" class="example-icon" aria-hidden="false" aria-label="Example user verified icon">play_circle</mat-icon>
-          <mat-icon *ngIf="paused" class="example-icon" aria-hidden="false" aria-label="Example user verified icon">pause_circle</mat-icon>
+        <button mat-icon-button aria-label="Example icon button with a vertical three dot icon" (click) = "playSong()">
+          <mat-icon *ngIf="paused" class="example-icon" aria-hidden="false" aria-label="Example user verified icon">play_circle</mat-icon>
+          <mat-icon *ngIf="!paused" class="example-icon" aria-hidden="false" aria-label="Example user verified icon">pause_circle</mat-icon>
         </button>
         <button mat-icon-button aria-label="Example icon button with a vertical three dot icon">
           <mat-icon class="example-icon" aria-hidden="false" aria-label="Example user verified icon">skip_next</mat-icon>
@@ -32,8 +32,10 @@
           <mat-icon class="example-icon" aria-hidden="false" aria-label="Example user verified icon">playlist_add</mat-icon>
         </button>
       </div>
+    </mat-toolbar-row>
 
-
+    <mat-toolbar-row>
+      {{this.songInfo?.name}}
     </mat-toolbar-row>
   </mat-toolbar>
 </div>

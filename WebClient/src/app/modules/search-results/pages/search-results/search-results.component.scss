@@ -1,0 +1,19 @@
+
+
+ .albums, .songs {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+ .songs__results, .albums__results{
+   display: flex;
+   flex-direction: column;
+   text-align: center;
+   margin: 5px;
+ }
+
+img{
+  width: 200px  ;
+}

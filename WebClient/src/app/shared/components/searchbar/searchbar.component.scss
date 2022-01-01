@@ -1,0 +1,12 @@
+
+main{
+  height: 100%;
+  display: flex;
+  justify-content: center;
+}
+input{
+  width: 400px;
+  &:focus, &:focus, &:focus{
+    outline: none;
+  }
+}

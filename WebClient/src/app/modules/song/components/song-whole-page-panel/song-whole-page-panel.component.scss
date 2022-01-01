@@ -1,0 +1,19 @@
+main{
+  background-color: #212121;
+}
+
+section{
+  display: flex;
+  flex-direction: row;
+  padding: 20px;
+}
+
+.infoPanel{
+  margin: 10px;
+}
+
+.cover{
+  img{
+    max-width: 200px;
+  }
+}

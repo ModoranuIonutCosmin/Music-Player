@@ -13,6 +13,7 @@ namespace Domain.Entities
         public string Description { get; set; }
         public string CoverImageUrl { get; set; }
         public DateTimeOffset ReleaseDate { get; set; }
+        public DateTimeOffset DateAdded { get; set; }
         public List<Artist> Artists { get; set; }
         public List<Song> Songs { get; set; }
     }

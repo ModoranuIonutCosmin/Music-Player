@@ -1,5 +1,5 @@
 ﻿using Application.Features.Metadata;
-using Domain.Entities;
+using Application.Features.Song_Access;
 using Domain.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -30,10 +30,13 @@ namespace WebAPI.Controllers.v1
         [HttpGet("album")]
         public async Task<IActionResult> GetAlbumMetadata([FromQuery] GetAlbumDetailedInfoCommand album)
         {
-            return Ok(await mediator.Send<AlbumResponseDTO>(new GetAlbumDetailedInfoCommand
-            {
-                AlbumId = album.AlbumId,
-            }));
+            return Ok(await mediator.Send<AlbumResponseDTO>(album));
+        }
+
+        [HttpGet("song")]
+        public async Task<IActionResult> GetAlbumMetadata([FromQuery] GetSongDetailedInfoCommand song)
+        {
+            return Ok(await mediator.Send<SongResponseDTO>(song));
         }
     }
 }

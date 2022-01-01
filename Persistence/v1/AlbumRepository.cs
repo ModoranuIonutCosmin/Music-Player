@@ -20,9 +20,12 @@ namespace Persistence.v1
                 .SingleOrDefaultAsync();
         }
 
-        public async Task<List<Album>> GetAlbumsByNameSimilarity(string name)
+        public async Task<List<Album>> GetAlbumsByNameSimilarity(string name, int count = int.MaxValue, int page = 0)
         {
             return await context.Albums.Where(e => e.Name.ToLower().Contains(name))
+                .OrderBy(e => e.DateAdded)
+                .Skip(page * count)
+                .Take(count)
                 .ToListAsync();
         }
     }

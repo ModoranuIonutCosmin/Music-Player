@@ -22,6 +22,10 @@ public class CreateNewAlbumCommandHandler : IRequestHandler<CreateNewAlbumComman
 
         Album newAlbum = mapper.Map<AlbumModel, Album>(albumModel);
 
+        newAlbum.DateAdded = DateTimeOffset.UtcNow;
+
+        newAlbum.Songs.ForEach(song => song.CoverImageUrl = newAlbum.CoverImageUrl);
+
         HashSet<Artist> allAlbumArtists = new();
 
         foreach (SongModel songModel in albumModel.Songs)
