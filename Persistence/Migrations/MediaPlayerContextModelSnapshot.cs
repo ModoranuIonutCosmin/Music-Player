@@ -155,8 +155,15 @@ namespace Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Name")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
                     b.Property<Guid?>("UserId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Visibility")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -190,14 +197,9 @@ namespace Persistence.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<Guid?>("PlaylistId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
                     b.HasIndex("AlbumId");
-
-                    b.HasIndex("PlaylistId");
 
                     b.ToTable("Songs");
                 });
@@ -235,6 +237,21 @@ namespace Persistence.Migrations
                         .IsUnique();
 
                     b.ToTable("StorageInfo");
+                });
+
+            modelBuilder.Entity("PlaylistSong", b =>
+                {
+                    b.Property<Guid>("PlaylistsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("SongsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("PlaylistsId", "SongsId");
+
+                    b.HasIndex("SongsId");
+
+                    b.ToTable("PlaylistSong");
                 });
 
             modelBuilder.Entity("AlbumArtist", b =>
@@ -279,7 +296,7 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.Entities.Playlist", b =>
                 {
                     b.HasOne("Domain.Entities.ApplicationUser", "User")
-                        .WithMany()
+                        .WithMany("Playlists")
                         .HasForeignKey("UserId");
 
                     b.Navigation("User");
@@ -290,10 +307,6 @@ namespace Persistence.Migrations
                     b.HasOne("Domain.Entities.Album", "Album")
                         .WithMany("Songs")
                         .HasForeignKey("AlbumId");
-
-                    b.HasOne("Domain.Entities.Playlist", null)
-                        .WithMany("Songs")
-                        .HasForeignKey("PlaylistId");
 
                     b.Navigation("Album");
                 });
@@ -307,14 +320,29 @@ namespace Persistence.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("PlaylistSong", b =>
+                {
+                    b.HasOne("Domain.Entities.Playlist", null)
+                        .WithMany()
+                        .HasForeignKey("PlaylistsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.Song", null)
+                        .WithMany()
+                        .HasForeignKey("SongsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Domain.Entities.Album", b =>
                 {
                     b.Navigation("Songs");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Playlist", b =>
+            modelBuilder.Entity("Domain.Entities.ApplicationUser", b =>
                 {
-                    b.Navigation("Songs");
+                    b.Navigation("Playlists");
                 });
 
             modelBuilder.Entity("Domain.Entities.Song", b =>

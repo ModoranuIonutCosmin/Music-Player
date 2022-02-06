@@ -24,4 +24,6 @@ public class Song : BaseEntity
     public Album Album { get; set; }
 
     public Storage Storage { get; set; }
+    
+    public List<Playlist> Playlists { get; set; }
 }

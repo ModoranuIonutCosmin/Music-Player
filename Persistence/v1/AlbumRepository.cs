@@ -13,7 +13,7 @@ namespace Persistence.v1
 
         public async Task<Album> GetAllAlbumInformationByAlbumId(Guid albumId)
         {
-            return await context.Albums.Where(e => e.Id == albumId)
+            return await Context.Albums.Where(e => e.Id == albumId)
                 .Include(e => e.Songs)
                     .ThenInclude(e => e.Artists)
                 .Include(e => e.Artists)
@@ -22,7 +22,7 @@ namespace Persistence.v1
 
         public async Task<List<Album>> GetAlbumsByNameSimilarity(string name, int count = int.MaxValue, int page = 0)
         {
-            return await context.Albums.Where(e => e.Name.ToLower().Contains(name))
+            return await Context.Albums.Where(e => e.Name.ToLower().Contains(name))
                 .OrderBy(e => e.DateAdded)
                 .Skip(page * count)
                 .Take(count)

@@ -6,6 +6,9 @@ import {mergeMap} from "rxjs/operators";
 import {SongService} from "../../../../core/services/media/songs/song.service";
 import {SongInfo} from "../../../album/models/song-info";
 import {AudioService} from "../../../../core/services/music player/audio.service";
+import {
+  MusicPlayerControllerFacadeService
+} from "../../../../core/services/music player/music-player-controller-facade.service";
 
 @Component({
   selector: 'app-song-page',
@@ -19,8 +22,7 @@ export class SongPageComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
               private songService: SongService,
-              private audioService: AudioService,
-              private mediaActivityService: MusicActivityService
+              private playerService: MusicPlayerControllerFacadeService
   ) {}
 
   ngOnInit(): void {
@@ -34,7 +36,6 @@ export class SongPageComponent implements OnInit {
   }
 
   playSong() {
-    console.log('song playing');
-    this.mediaActivityService.storeLastActivity("play", this.songId, 0, this.dataSource, true);
+    this.playerService.startPlayingSingularSong(this.dataSource);
   }
 }

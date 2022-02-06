@@ -19,12 +19,12 @@ namespace Persistence.v1
             storageInfo.Url = url;
             storageInfo.UrlExpiration = expiryDate;
 
-            await context.SaveChangesAsync();
+            await Context.SaveChangesAsync();
         }
 
         public async Task<Storage> FindBySongId(Guid songId)
         {
-            return await context.StorageInfo.SingleOrDefaultAsync(e => e.SongId.Equals(songId));
+            return await Context.StorageInfo.SingleOrDefaultAsync(e => e.SongId.Equals(songId));
         }
     }
 }

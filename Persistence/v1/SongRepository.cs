@@ -17,14 +17,14 @@ namespace Persistence.v1
 
             song.Length = ticksLength;
 
-            await context.SaveChangesAsync();
+            await Context.SaveChangesAsync();
 
             return song;
         }
 
         public async Task<List<Song>> GetSongByNameSimilarity(string name, int count = int.MaxValue, int page = 0)
         {
-            return await context.Songs.Where(e => e.Name.ToLower().Contains(name))
+            return await Context.Songs.Where(e => e.Name.ToLower().Contains(name))
                 .OrderBy(e => e.DateAdded)
                 .Skip(page * count)
                 .Take(count)
@@ -37,14 +37,14 @@ namespace Persistence.v1
 
             song.DateAdded = dateAdded;
 
-            await context.SaveChangesAsync();
+            await Context.SaveChangesAsync();
 
             return song;
         }
 
         public async Task<Song> LoadSongRelatedData(Guid songId)
         {
-            return await context.Songs
+            return await Context.Songs
                 .Include(e => e.Artists)
                 .SingleOrDefaultAsync(e => e.Id.Equals(songId));
 
