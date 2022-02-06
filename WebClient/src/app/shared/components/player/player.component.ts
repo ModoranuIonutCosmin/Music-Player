@@ -1,9 +1,10 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {AudioService} from "../../../core/services/music player/audio.service";
-import {MusicActivityService} from "../../../core/services/states/music-activity.service";
-import {BehaviorSubject} from "rxjs";
-import {MediaService} from "../../../core/services/media/media.service";
+import {BehaviorSubject, timer} from "rxjs";
 import {SongInfo} from "../../../modules/album/models/song-info";
+import {
+  MusicPlayerControllerFacadeService
+} from "../../../core/services/music player/music-player-controller-facade.service";
+import {MusicActivityModel} from "../../models/music-activity-model";
 import {DurationFormatterService} from "../../../core/services/helpers/duration-formatter.service";
 
 @Component({
@@ -15,70 +16,58 @@ export class PlayerComponent implements OnInit {
 
   @Input() paused: boolean = true;
   @Input() shuffled: boolean = false;
-  songInfo!: SongInfo;
+  songInfo: SongInfo;
+  trackPosition: string;
   albumId: string | undefined;
   playerStatus: BehaviorSubject<string>
+  userActivity: BehaviorSubject<MusicActivityModel>
 
 
-  constructor(public audioService: AudioService,
-              private musicActivityService: MusicActivityService,
-              private mediaService: MediaService,
-              private durationFormatter: DurationFormatterService) {
+  constructor(public playerService: MusicPlayerControllerFacadeService,
+              public durationFormatter: DurationFormatterService) {
+    this.playerStatus = playerService.getPlayerStatusStream();
+    this.userActivity = playerService.getUserActivity();
 
-    this.playerStatus = audioService.playerStatus;
-    this.playerStatus.subscribe(state => {
-      if (state == 'ended') {
-        this.paused = true;
-      }
-
-      if (state == 'playing') {
-        this.paused = false;
-      }
-    });
-    musicActivityService.currentSongData.subscribe(activity => {
-      let songId = activity?.songInfo?.id || "";
-      // if (this.songInfo?.id == songId) {
-      //   return;
-      // }
-      //TODO: PENDING FINDING BETTER WAY OF HANDLING DOUBLE (TRIPLE, 100) CLICK
-
-      let shouldPlayNow = activity.shouldPlayNow;
-
-      if (activity.songInfo != undefined) {
-        this.songInfo = activity.songInfo;
-        this.songInfo.formattedLength = durationFormatter.formatLength(this.songInfo.length);
-      }
-
-      this.mediaService.getSongUrl(songId || "")
-        .subscribe(song => {
-
-          if (shouldPlayNow) {
-            console.log("setare url");
-            this.audioService.setAudio(song.url);
-            this.paused = false;
-          } else {
-            this.audioService.setUrl(song.url);
-          }
-
-        }, (err) => {
-          this.audioService.setUrl("");
-        });
-    })
+    this.trackPosition= "0:00";
+    this.songInfo = {
+      position: 0,
+      coverImageUrl: "",
+      length: 0,
+      name: ""
+    };
   }
 
   ngOnInit(): void {
+    this.playerStatus.subscribe(status => {
+      if (status == "ended" || status == "pause" || status == "waiting") {
+        this.paused = true;
+      } else if (status == "playing") {
+        this.paused = false;
+      }
+    });
+    this.userActivity.subscribe(activity => {
+        this.songInfo = activity.songInfo || this.songInfo;
+        this.shuffled = activity.isShuffled || false;
+        console.log(this.songInfo);
+    })
 
+    timer(0, 500)
+      .subscribe(_ => {
+        this.trackPosition = this.durationFormatter.formatLength((this.userActivity.value.trackPosition || 0) * 10000000 );
+      })
   }
 
   playSong() {
 
     if (!this.paused) {
-      this.audioService.pauseAudio();
-      this.paused = true;
+      this.playerService.pauseCurrentSong();
+      this.paused = !this.paused;
+      console.log('Punem melodie pe pause!');
       return;
     }
 
+    console.log('Punem melodie sa cante!');
     this.paused = !this.paused;
-    this.audioService.playAudio();
+    this.playerService.resumeCurrentSong();
   }
 }

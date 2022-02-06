@@ -3,6 +3,7 @@ import {Observable} from "rxjs";
 import {ApiPaths, environment} from "../../../../environments/environment";
 import {HttpClient} from "@angular/common/http";
 import {ResourceUrlResponse} from "../../../shared/models/resource-url-response";
+import {MusicActivityModel} from "../../../shared/models/music-activity-model";
 
 @Injectable()
 export class MediaService {
@@ -13,4 +14,6 @@ export class MediaService {
     return this.httpClient
       .get<ResourceUrlResponse>(environment.baseUrl + ApiPaths.mediaService + `?songId=${songId}`)
   }
+
+
 }

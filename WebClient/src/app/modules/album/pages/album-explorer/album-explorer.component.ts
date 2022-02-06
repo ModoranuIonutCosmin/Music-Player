@@ -7,6 +7,9 @@ import {AlbumInfo} from "../../models/album-info";
 import {MusicActivityService} from "../../../../core/services/states/music-activity.service";
 import {AudioService} from "../../../../core/services/music player/audio.service";
 import {DurationFormatterService} from "../../../../core/services/helpers/duration-formatter.service";
+import {
+  MusicPlayerControllerFacadeService
+} from "../../../../core/services/music player/music-player-controller-facade.service";
 
 @Component({
   selector: 'app-album-explorer',
@@ -39,9 +42,8 @@ export class AlbumExplorerComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
               private albumService: AlbumService,
-              private audioService: AudioService,
-              private mediaActivityService: MusicActivityService,
-              private durationFormatter: DurationFormatterService
+              private durationFormatter: DurationFormatterService,
+              private playerService: MusicPlayerControllerFacadeService
               ) {
   }
 
@@ -65,6 +67,6 @@ export class AlbumExplorerComponent implements OnInit {
   }
 
   songPlayClicked(songInfo: SongInfo) {
-    this.mediaActivityService.storeLastActivity("album", this.albumId, 0, songInfo, true);
+    this.playerService.startPlayingAlbum(this.albumId, songInfo);
   }
 }

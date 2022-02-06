@@ -35,7 +35,7 @@ namespace Persistence.Context
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsbuilder)
         {
-            optionsbuilder.UseSqlServer("Data Source=.\\SQLEXPRESS;Database=Onion;Integrated Security=True");
+            optionsbuilder.UseSqlServer("Data Source=.\\SQLEXPRESS;Database=Player;Integrated Security=True");
         }
     }
 }

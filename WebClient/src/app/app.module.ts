@@ -21,6 +21,7 @@ import {MusicActivityService} from "./core/services/states/music-activity.servic
 import {MaterialModule} from "./modules/material/material.module";
 import {FormsModule} from "@angular/forms";
 import { SearchbarComponent } from './shared/components/searchbar/searchbar.component';
+import {MusicPlayerControllerFacadeService} from "./core/services/music player/music-player-controller-facade.service";
 
 @NgModule({
   declarations: [
@@ -55,7 +56,8 @@ import { SearchbarComponent } from './shared/components/searchbar/searchbar.comp
     AuthenticationService,
     AudioService,
     MusicActivityService,
-    MediaService
+    MediaService,
+    MusicPlayerControllerFacadeService
 ],
   bootstrap: [AppComponent]
 })
