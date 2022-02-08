@@ -22,6 +22,10 @@ const routes: Routes = [
   {
     path: 'search',
     loadChildren: () => import('./modules/search-results/search-results.module').then(m => m.SearchResultsModule)
+  },
+  {
+    path: 'upload',
+    loadChildren: () => import('./modules/upload/upload.module').then(m => m.UploadModule)
   }
 ];
 

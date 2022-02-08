@@ -1,0 +1,23 @@
+.container{
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+}
+
+
+.playlist{
+  img {
+    width: 50px;
+  }
+  display: flex;
+  flex-direction: column;
+}
+
+div {
+  display: inline-flex;
+  width: 100px;
+}
+mat-dialog-content{
+  display: flex;
+  flex-wrap: wrap;
+}

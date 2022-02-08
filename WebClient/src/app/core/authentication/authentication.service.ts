@@ -2,11 +2,12 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {LoginResponse} from "./models/login-response";
-import {ApiPaths, environment} from "../../../environments/environment";
+import {environment} from "../../../environments/environment";
 import {LoginRequest} from "./models/login-request";
 import {shareReplay, tap} from "rxjs/operators";
 import {RegisterRequest} from "./models/register-request";
 import {RegisterResponse} from "./models/register-response";
+import {ApiPaths} from "../../../environments/apiPaths";
 
 @Injectable()
 export class AuthenticationService {

@@ -1,12 +1,14 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
+import { PlaylistRoutingModule } from './playlist-routing.module';
 
 
 @NgModule({
   declarations: [],
   imports: [
-    CommonModule
+    CommonModule,
+    PlaylistRoutingModule
   ]
 })
-export class CoreModule { }
+export class PlaylistModule { }

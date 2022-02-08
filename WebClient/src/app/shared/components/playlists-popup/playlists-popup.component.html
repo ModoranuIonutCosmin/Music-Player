@@ -1,0 +1,25 @@
+<main >
+
+  <div class="container">
+    <h2 mat-dialog-title>Add a playlist</h2>
+
+    <mat-dialog-content class="mat-typography">
+      <div class="playlist" (click) = "addNewPlaylist()" >
+        <img src="http://simpleicon.com/wp-content/uploads/playlist.png"/>
+        <input type="text" [readOnly]="readOnly" (keyup.enter) = "finishEditing()"
+               (keyup.escape)="resetFromEdit()"
+               [(ngModel)]="enteredName"/>
+      </div>
+
+      <div class = "playlist" *ngFor="let playlist of this.dataSource.playlists"
+      (click) = "addSongToPlaylist(playlist.id)">
+        <img src="http://simpleicon.com/wp-content/uploads/playlist.png"/>
+        <p>{{playlist.name}}</p>
+      </div>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+      <button mat-button mat-dialog-close>Cancel</button>
+      <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Install</button>
+    </mat-dialog-actions>
+  </div>
+</main>
