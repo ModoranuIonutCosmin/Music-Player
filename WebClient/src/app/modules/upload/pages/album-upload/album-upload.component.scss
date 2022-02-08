@@ -1,0 +1,33 @@
+.dropzone {
+  width: 500px;
+  padding: 3em;
+  margin: 0 auto;
+  text-align: center;
+  border: 1px solid lime;
+  position: relative;
+
+  input {
+    opacity: 0;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+  }
+  label{
+    padding: 20px;
+    background-color: lime;
+    border-radius: 40px;
+    color: white;
+    cursor: pointer;
+  }
+}
+
+.uploadImgBg{
+  width: 200px;
+  opacity: 25%;
+}
+
+.fileover{
+  background-color: pink;
+}
+

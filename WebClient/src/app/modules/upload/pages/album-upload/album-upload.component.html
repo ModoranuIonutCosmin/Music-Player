@@ -1,0 +1,77 @@
+<main>
+  <header>
+    <h1>We're happy to upload your album</h1>
+    <p>
+      Browse for the audio files by clicking the [] button or by dragging
+      and dropping them onto the rectangle bellow.
+    </p>
+  </header>
+
+  <div class="dropzone" appDragAndDrop (filesDropped)="newFilesDropped($event)">
+    <input type="file" #fileDropRef id="fileDropRef" multiple
+           (change)="newFilesBrowsed($event)"
+           accept="audio/mpeg"
+    >
+    <img class="uploadImgBg" src="../../../../../assets/images/upload.png" alt="drag and drop icon"/>
+    <h3>Drop your .mp3 files here.</h3>
+    <label for="fileDropRef">Browse for file</label>
+  </div>
+  <div>
+
+    <h2>File browser</h2>
+    <form [formGroup]="this.albumInfo">
+      <label for="albumName">Name: </label>
+      <input id="albumName" type="text" formControlName="name"/>
+
+      <label for="coverUrl">Cover image url: </label>
+      <input id="coverUrl" type="text" formControlName="coverImageUrl"/>
+
+      <label for="description">Description: </label>
+      <input id="description" type="text" formControlName="description"/>
+
+      <label for="releaseDate">Release date:</label>
+      <input formControlName="releaseDate" id="releaseDate" type="date"/>
+      <div formArrayName="songs">
+        <div *ngFor="let song of getSongs().controls; let songIndex = index">
+          <div [formGroupName]="songIndex">
+            <label for="name--{{songIndex}}">Name: </label>
+            <input id="name--{{songIndex}}" type="text" formControlName="name"/>
+            <button mat-icon-button color="primary" aria-label="Cancel uploading this file"
+                    (click)="removeFile(songIndex)">
+              <mat-icon>delete</mat-icon>
+            </button>
+
+            <h3>
+              Status:
+              <p>{{this.songFiles[songIndex].progress}}% </p>
+              <p>{{this.songFiles[songIndex].failed}}</p>
+            </h3>
+
+            <div formArrayName="artists">
+              <div *ngFor="let artist of this.getArtists(songIndex).controls; let artistIndex = index">
+
+                <div [formGroupName]="artistIndex">
+                  {{artistIndex}}
+                  <label for="artist--{{artistIndex}}">Artist {{artistIndex + 1}}: </label>
+                  <input id="artist--{{artistIndex}}" type="text" formControlName="artistName"/>
+
+                  <button mat-icon-button color="primary" (click)="removeArtistAtIndexForSong(songIndex, artistIndex)"
+                          aria-label="Remove artist">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </div>
+
+              </div>
+              <button mat-icon-button color="primary" (click)="addNewArtist(songIndex)" aria-label="Add new artist">
+                <mat-icon>add</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </form>
+    <button type="button" (click)="this.initFileUpload()">Upload</button>
+  </div>
+</main>

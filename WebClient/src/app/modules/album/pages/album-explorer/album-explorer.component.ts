@@ -10,6 +10,8 @@ import {DurationFormatterService} from "../../../../core/services/helpers/durati
 import {
   MusicPlayerControllerFacadeService
 } from "../../../../core/services/music player/music-player-controller-facade.service";
+import {PlaylistsPopupComponent} from "../../../../shared/components/playlists-popup/playlists-popup.component";
+import {MatDialog} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-album-explorer',
@@ -40,10 +42,11 @@ export class AlbumExplorerComponent implements OnInit {
       }];
   albumId!: string
 
+
   constructor(private route: ActivatedRoute,
               private albumService: AlbumService,
               private durationFormatter: DurationFormatterService,
-              private playerService: MusicPlayerControllerFacadeService
+              private playerService: MusicPlayerControllerFacadeService,
               ) {
   }
 
@@ -57,6 +60,7 @@ export class AlbumExplorerComponent implements OnInit {
       this.songsData.forEach((value, index) =>
       {
         value.position = index + 1;
+        console.log(value);
         value.formattedLength = this.durationFormatter.formatLength(value.length);
         let coverUrl = value.coverImageUrl;
         if(!(coverUrl && coverUrl.trim())){

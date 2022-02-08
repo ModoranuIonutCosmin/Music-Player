@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import {SongInfo} from "../../../../modules/album/models/song-info";
 import {Observable} from "rxjs";
 import {HttpClient} from "@angular/common/http";
-import {ApiPaths, environment} from "../../../../../environments/environment";
+import {environment} from "../../../../../environments/environment";
+import {ApiPaths} from "../../../../../environments/apiPaths";
 
 @Injectable()
 export class SongService {

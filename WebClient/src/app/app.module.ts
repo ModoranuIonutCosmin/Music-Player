@@ -22,12 +22,15 @@ import {MaterialModule} from "./modules/material/material.module";
 import {FormsModule} from "@angular/forms";
 import { SearchbarComponent } from './shared/components/searchbar/searchbar.component';
 import {MusicPlayerControllerFacadeService} from "./core/services/music player/music-player-controller-facade.service";
+import { PlaylistsPopupComponent } from './shared/components/playlists-popup/playlists-popup.component';
+import {PlaylistsService} from "./core/services/playlists/playlists.service";
 
 @NgModule({
   declarations: [
     AppComponent,
     PlayerComponent,
     SearchbarComponent,
+    PlaylistsPopupComponent,
   ],
   imports: [
     BrowserModule,
@@ -57,7 +60,8 @@ import {MusicPlayerControllerFacadeService} from "./core/services/music player/m
     AudioService,
     MusicActivityService,
     MediaService,
-    MusicPlayerControllerFacadeService
+    MusicPlayerControllerFacadeService,
+    PlaylistsService
 ],
   bootstrap: [AppComponent]
 })

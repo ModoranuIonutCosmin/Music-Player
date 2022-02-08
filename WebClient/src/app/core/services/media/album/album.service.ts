@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {ApiPaths, environment} from "../../../../../environments/environment";
+import {environment} from "../../../../../environments/environment";
 import {AlbumInfo} from "../../../../modules/album/models/album-info";
+import {ApiPaths} from "../../../../../environments/apiPaths";
 
 @Injectable()
 export class AlbumService {
