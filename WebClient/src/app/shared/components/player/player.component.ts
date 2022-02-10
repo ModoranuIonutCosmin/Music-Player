@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, HostListener, Input, OnInit} from '@angular/core';
 import {BehaviorSubject, timer} from "rxjs";
 import {SongInfo} from "../../../modules/album/models/song-info";
 import {
@@ -14,14 +14,38 @@ import {DurationFormatterService} from "../../../core/services/helpers/duration-
 })
 export class PlayerComponent implements OnInit {
 
+  ARROW_SKIP_MSEC: number = 5000;
+
   @Input() paused: boolean = true;
   @Input() shuffled: boolean = false;
   songInfo: SongInfo;
+
   trackPosition: string;
+  totalTrackTime: string;
+  trackPositionMsec: number = 0;
+  totalTrackTimeMsec: number = 0;
+
   albumId: string | undefined;
   playerStatus: BehaviorSubject<string>
   userActivity: BehaviorSubject<MusicActivityModel>
 
+  // @HostListener('document:keyup', ['$event'])
+  // handleNonHoldingKeyPresses(event: KeyboardEvent) {
+  //   if (event.key == ' ') {
+  //     console.log(event.target);
+  //     this.playSong();
+  //   }
+  // }
+  // @HostListener('document:keydown', ['$event'])
+  // handleKeyboardEvent(event: KeyboardEvent) {
+  //   if (event.key == 'ArrowLeft') {
+  //     this.playerService.seekSkipMiliseconds(this.ARROW_SKIP_MSEC, false);
+  //   }
+  //
+  //   if (event.key == 'ArrowRight') {
+  //     this.playerService.seekSkipMiliseconds(this.ARROW_SKIP_MSEC, true);
+  //   }
+  // }
 
   constructor(public playerService: MusicPlayerControllerFacadeService,
               public durationFormatter: DurationFormatterService) {
@@ -29,6 +53,7 @@ export class PlayerComponent implements OnInit {
     this.userActivity = playerService.getUserActivity();
 
     this.trackPosition= "0:00";
+    this.totalTrackTime = "0:00";
     this.songInfo = {
       position: 0,
       coverImageUrl: "",
@@ -48,13 +73,32 @@ export class PlayerComponent implements OnInit {
     this.userActivity.subscribe(activity => {
         this.songInfo = activity.songInfo || this.songInfo;
         this.shuffled = activity.isShuffled || false;
+        this.totalTrackTime = this.durationFormatter.formatLength((activity.songInfo?.length   || 0));
+        this.totalTrackTimeMsec = (activity.songInfo?.length   || 0) / 10000;
         console.log(this.songInfo);
     })
 
     timer(0, 500)
       .subscribe(_ => {
-        this.trackPosition = this.durationFormatter.formatLength((this.userActivity.value.trackPosition || 0) * 10000000 );
+        this.trackPositionMsec = (this.userActivity.value.trackPosition || 0) * 1000;
+        this.songInfo = (this.userActivity.value.songInfo) || this.songInfo;
+        this.trackPosition = this.durationFormatter.formatLength(this.trackPositionMsec * 10000 );
       })
+  }
+
+  progressPercent(): number {
+    return (this.trackPositionMsec / (this.totalTrackTimeMsec + 0.00001)) * 100;
+  }
+
+  seek(event: any): void {
+    let progressBarRect: any = event.target.getBoundingClientRect();
+
+    let clickX = event.clientX;
+    let progressBarWidth = progressBarRect.right - progressBarRect.left;
+    let clickDistance = clickX - progressBarRect.left;
+
+    let percentSeek = clickDistance / (progressBarWidth + 0.0001);
+    this.playerService.seekToPercentage((this.totalTrackTimeMsec / 1000) * percentSeek);
   }
 
   playSong() {

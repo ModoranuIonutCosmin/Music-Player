@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {Observable} from "rxjs";
+import {BehaviorSubject, Observable} from "rxjs";
 import {LoginResponse} from "./models/login-response";
 import {environment} from "../../../environments/environment";
 import {LoginRequest} from "./models/login-request";
@@ -11,9 +11,10 @@ import {ApiPaths} from "../../../environments/apiPaths";
 
 @Injectable()
 export class AuthenticationService {
+  user: BehaviorSubject<string> = new BehaviorSubject<string>('');
 
   constructor(private httpClient: HttpClient) {
-
+    this.user.next(this.getUsername());
   }
 
   public login(username: string, password: string): Observable<LoginResponse> {
@@ -30,7 +31,7 @@ export class AuthenticationService {
         shareReplay());
   }
 
-  public register(registerRequest : RegisterRequest) {
+  public register(registerRequest: RegisterRequest) {
     return this.httpClient
       .post<RegisterResponse>(environment.baseUrl + ApiPaths.registerService,
         registerRequest)
@@ -43,6 +44,7 @@ export class AuthenticationService {
 
     localStorage.setItem('id_token', loginResponse.jwtToken);
     localStorage.setItem("expires_at", expiresAt.toString());
+    localStorage.setItem("userNonce", JSON.stringify({userName: loginResponse.userName}));
   }
 
   public isLoggedIn() {
@@ -51,11 +53,19 @@ export class AuthenticationService {
     return this.getExpiration() >= today
   }
 
-  getExpiration() : Date {
+  getExpiration(): Date {
     const expiration = localStorage.getItem("expires_at") ?? "";
 
     return new Date(expiration);
   }
+
+  getUsername(): string {
+
+    let userPublicData: string = localStorage.getItem("userNonce")  || '{}';
+
+    return JSON.parse(userPublicData).userName;
+  }
+
 
   logout() {
     localStorage.removeItem("id_token");

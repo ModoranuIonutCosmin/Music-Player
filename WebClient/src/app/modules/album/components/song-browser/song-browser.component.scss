@@ -1,45 +1,97 @@
-main {
-  height: 100%;
+.nameCell {
+  text-align: left;
+  word-break: break-word;
+
+  p {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
 }
 
-mat-table {
-  height: 100%;
-}
-
-mat-cell{
-  width: 100%;
-  height: 100%;
-  color: inherit;
+.mat-column-coverImg{
+  width: 60px;
+  flex: 0 0 60px;
 }
 
 .mat-column-position {
-  width: 100%;
+  padding: 0 !important;
+  width: 50px;
+  flex: 0 0 50px;
   justify-content: center;
 }
+.mat-column-length {
+  width: 70px;
+  flex: 0 0 70px;
+}
 
-.mat-column-name{
+.mat-column-name {
   flex: 0 0 80%;
 }
-.mat-column-coverImg{
-  margin: 0 15px 0 0;
+
+.mat-column-controls {
+  width: 50px;
+  flex: 0 0 50px;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
-.coverImage{
+
+.coverImage {
   max-width: 40px;
 }
 
-mat-row {
-  color: limegreen;
+.controls{
+  button{
+    padding: 0 !important;
+    margin: 0 !important;
+  }
 }
 
-mat-row:hover {
-  background-color: limegreen;
-  color: white;
+
+
+@media (min-width: 800px) and (max-width: 1100px){
+
+  .nameCell {
+    max-width: 900px;
+  }
 }
 
-#controlsCell
-{
-  border: 0px;
+
+
+@media (min-width: 600px) and (max-width: 799px) {
+
+  .nameCell {
+    max-width: 380px;
+  }
+}
+
+@media (min-width: 400px) and (max-width: 600px) {
+
+  .nameCell {
+    max-width: 170px;
+  }
+}
+
+@media (max-width: 399px) {
+
+  .nameCell {
+    max-width: 125px;
+  }
+
+  .coverImage {
+    visibility: collapse;
+  }
+
+  .mat-column-controls{
+    margin-left: 5px;
+  }
+
+  .mat-column-coverImg{
+    width: 0;
+    flex: 0 0 0px;
+    padding: 0;
+  }
 }
 
 

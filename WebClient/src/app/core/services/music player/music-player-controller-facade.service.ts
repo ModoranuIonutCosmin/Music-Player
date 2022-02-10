@@ -82,6 +82,24 @@ export class MusicPlayerControllerFacadeService {
     this.audioService.playAudio()
   }
 
+  seekToPercentage(position: number): void {
+    this.audioService.seekAudio(position);
+  }
+
+  seekSkipMiliseconds(msecAmount: number, forwards: boolean): void {
+    let secondsAddedQuanity = msecAmount / 1000 * (forwards ? 1 : -1);
+    let currentProgress = this.audioService.audio.currentTime;
+
+    if (currentProgress - secondsAddedQuanity < 0) {
+      this.audioService.seekAudio(0);
+      return;
+    }
+
+    this.audioService.seekAudio(currentProgress + secondsAddedQuanity);
+  }
+
+
+
   playSongFromTheBeginningOrThePreviousSong(): void {
     let activity = this.latestUserActivity.value;
 

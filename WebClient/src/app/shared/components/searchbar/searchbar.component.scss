@@ -1,12 +1,45 @@
+@use '../../../../themes' as *;
 
-main{
-  height: 100%;
+
+
+main {
+  position: relative;
+}
+
+.searchBar {
+  width: 100%;
   display: flex;
   justify-content: center;
 }
-input{
-  width: 400px;
-  &:focus, &:focus, &:focus{
-    outline: none;
+
+.suggestionsList {
+  width: inherit;
+  background-color: nb-theme(color-basic-700);
+  padding: 0;
+  margin: 0;
+  left: 0;
+  right: 0;
+  position: absolute;
+  list-style-type: none;
+
+  .searchBar__feedback{
+    padding: 0 0 0 15px;
+  }
+  .suggestionsList__suggestion {
+    width: 100%;
+    padding: 0;
+    margin: 5px 0;
+    &:hover {
+      background-color: nb-theme(color-primary-400);
+    }
+    p{
+      margin: 0;
+      padding: 10px 15px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+    }
   }
 }
+
+

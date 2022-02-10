@@ -11,10 +11,11 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 })
 
 export class SongBrowserComponent implements OnInit {
-  displayedColumns: string[] = ['position', 'coverImg', 'name', 'length', 'controls'];
+  displayedColumns: string[] = ['coverImg', 'position', 'name', 'length', 'controls'];
   @Input() dataSource: SongInfo[];
   @Output() songPlayClicked: EventEmitter<SongInfo> = new EventEmitter<SongInfo>();
   highlightedElementIndex: number = -1;
+
 
 
   openDialog(songId: string,) {
