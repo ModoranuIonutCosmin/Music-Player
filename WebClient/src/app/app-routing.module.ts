@@ -26,6 +26,10 @@ const routes: Routes = [
   {
     path: 'upload',
     loadChildren: () => import('./modules/upload/upload.module').then(m => m.UploadModule)
+  },
+  {
+    path: 'playlist',
+    loadChildren: () => import('./modules/playlist/playlist.module').then(m => m.PlaylistModule)
   }
 ];
 

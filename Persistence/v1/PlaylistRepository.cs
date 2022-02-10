@@ -49,6 +49,8 @@ namespace Persistence.v1
                 .Where(u => u.Id.Equals(userId))
                     .Include(p => p.Playlists)
                     .ThenInclude(p => p.Songs)
+                .AsNoTracking()
+                .AsSplitQuery()
                 .SingleOrDefaultAsync();
 
             return userEntity.Playlists;

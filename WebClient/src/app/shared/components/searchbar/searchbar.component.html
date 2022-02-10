@@ -1,8 +1,26 @@
-
 <main>
-  <input [(ngModel)]="searchBarInput" type="text"/>
-  <button (click)="search()">
-    <mat-icon>search</mat-icon>
-  </button>
+  <div class = "searchBar">
+    <input class = "searchBar__input" nbInput type="text" fullWidth fieldSize="medium"
+           placeholder="Input your search query here"
+           #searchInput
+           (input)="onSearchTermChange($event)"
+           (focusin) = "this.dropdownVisible = true"
+           [(ngModel)]="searchBarInput"
+           (keyup.escape)="searchInput.blur()"
+           (keyup.enter) = "search()"
+    />
+    <button nbButton hero status="primary" (click)="search()">
+      <nb-icon icon="search"></nb-icon>
+    </button>
+  </div>
+  <ul class="suggestionsList" *ngIf="dropdownVisible">
+    <li class = "searchBar__feedback">Searching for {{this.currentSearchTerm$ | async}}...</li>
+    <li *ngFor="let suggestion of this.suggestions">
+      <div class = "suggestionsList__suggestion" (click) ="openSearchSuggestions(suggestion)">
+           <p> <nb-icon icon = "search"></nb-icon> {{suggestion.type}} . {{suggestion.info.name}} </p>
+      </div>
+
+    </li>
+  </ul>
 </main>
 

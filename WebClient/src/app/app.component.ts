@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
-import {Observable} from "rxjs";
-import {BreakpointObserver, Breakpoints} from "@angular/cdk/layout";
-import {map, shareReplay} from "rxjs/operators";
+import {Component} from '@angular/core';
+import {NbPosition, NbTrigger} from "@nebular/theme";
+import {AuthenticationService} from "./core/authentication/authentication.service";
+import {BehaviorSubject} from "rxjs";
 
 @Component({
   selector: 'app-root',
@@ -10,11 +10,18 @@ import {map, shareReplay} from "rxjs/operators";
 })
 export class AppComponent {
   title = 'MusicPlayer';
-  isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
-    .pipe(
-      map(result => result.matches),
-      shareReplay()
-    );
 
-  constructor(private breakpointObserver: BreakpointObserver) {}
+  //header stuff
+  exploreItems = [{title: 'Latest albums'}, {title: 'Popular'}];
+  libraryItems = [{title: 'Favorite songs'}, {title: 'My playlists'}];
+  usersControlsItems = [ {title: 'Playlists'},{title: 'Profile'}, {title: 'Log out'} ];
+
+  contextMenuOpenDirection: NbPosition = NbPosition.BOTTOM;
+  contextMenuOpenTrigger: NbTrigger = NbTrigger.HOVER;
+
+  currentUser$: BehaviorSubject<string>;
+
+  constructor(private authenticationService: AuthenticationService) {
+    this.currentUser$ = this.authenticationService.user;
+  }
 }

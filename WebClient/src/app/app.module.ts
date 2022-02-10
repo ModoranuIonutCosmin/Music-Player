@@ -24,6 +24,17 @@ import { SearchbarComponent } from './shared/components/searchbar/searchbar.comp
 import {MusicPlayerControllerFacadeService} from "./core/services/music player/music-player-controller-facade.service";
 import { PlaylistsPopupComponent } from './shared/components/playlists-popup/playlists-popup.component';
 import {PlaylistsService} from "./core/services/playlists/playlists.service";
+import {
+  NbThemeModule,
+  NbLayoutModule,
+  NbSidebarModule,
+  NbSearchModule,
+  NbIconModule,
+  NbContextMenuModule, NbMenuModule, NbInputModule, NbButtonModule, NbProgressBarModule, NbUserModule
+} from '@nebular/theme';
+import { NbEvaIconsModule } from '@nebular/eva-icons';
+import { CastPipe } from './core/cast.pipe';
+import {SearchService} from "./core/services/search/search.service";
 
 @NgModule({
   declarations: [
@@ -31,6 +42,7 @@ import {PlaylistsService} from "./core/services/playlists/playlists.service";
     PlayerComponent,
     SearchbarComponent,
     PlaylistsPopupComponent,
+    CastPipe,
   ],
   imports: [
     BrowserModule,
@@ -45,6 +57,22 @@ import {PlaylistsService} from "./core/services/playlists/playlists.service";
     MatListModule,
     MaterialModule,
     FormsModule,
+
+
+    NbThemeModule.forRoot({name: 'dark'}),
+    NbSidebarModule.forRoot(),
+    NbLayoutModule,
+    NbEvaIconsModule,
+    NbIconModule,
+    NbSidebarModule,
+    NbSearchModule,
+
+    NbContextMenuModule,
+    NbMenuModule.forRoot(),
+    NbInputModule,
+    NbButtonModule,
+    NbProgressBarModule,
+    NbUserModule,
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,
@@ -58,6 +86,7 @@ import {PlaylistsService} from "./core/services/playlists/playlists.service";
     },
     AuthenticationService,
     AudioService,
+    SearchService,
     MusicActivityService,
     MediaService,
     MusicPlayerControllerFacadeService,

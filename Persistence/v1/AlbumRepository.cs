@@ -17,6 +17,8 @@ namespace Persistence.v1
                 .Include(e => e.Songs)
                     .ThenInclude(e => e.Artists)
                 .Include(e => e.Artists)
+                .AsNoTracking()
+                .AsSplitQuery()
                 .SingleOrDefaultAsync();
         }
 

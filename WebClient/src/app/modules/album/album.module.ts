@@ -10,16 +10,19 @@ import {AlbumService} from "../../core/services/media/album/album.service";
 
 
 @NgModule({
-  declarations: [
-    SongBrowserComponent,
-    AlbumExplorerComponent,
-    AlbumInfoPanelComponent
-  ],
-  imports: [
-    CommonModule,
-    AlbumRoutingModule,
-    MaterialModule
-  ],
-  providers: [AlbumService]
+    declarations: [
+        SongBrowserComponent,
+        AlbumExplorerComponent,
+        AlbumInfoPanelComponent
+    ],
+    imports: [
+        CommonModule,
+        AlbumRoutingModule,
+        MaterialModule
+    ],
+    exports: [
+        SongBrowserComponent
+    ],
+    providers: [AlbumService]
 })
 export class AlbumModule { }
