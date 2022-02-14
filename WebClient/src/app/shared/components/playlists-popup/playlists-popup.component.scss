@@ -1,7 +1,14 @@
+@use '../../../../themes' as *;
+
+
 .container{
-  width: 320px;
+  text-align: center;
+  width: 520px;
+  max-height: 700px;
+  padding: 25px;
   display: flex;
   flex-direction: column;
+  background-color: nb-theme(color-basic-700);
 }
 
 
@@ -9,6 +16,7 @@
   img {
     width: 50px;
   }
+  margin: 25px;
   display: flex;
   flex-direction: column;
 }

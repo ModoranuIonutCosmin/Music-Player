@@ -7,6 +7,7 @@ import {
 } from "../../../../core/services/music player/music-player-controller-facade.service";
 import {PlaylistsService} from "../../../../core/services/playlists/playlists.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {DurationFormatterService} from "../../../../core/services/helpers/duration-formatter.service";
 
 @Component({
   selector: 'app-playlist-explorer',
@@ -23,6 +24,7 @@ export class PlaylistExplorerComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private playerService: MusicPlayerControllerFacadeService,
               private playlistService: PlaylistsService,
+              private durationFormatter: DurationFormatterService,
               private snackbar: MatSnackBar) {
   }
 
@@ -37,6 +39,7 @@ export class PlaylistExplorerComponent implements OnInit {
   }
 
   songPlayed(songInfo: SongInfo) {
+    console.log(songInfo);
     this.playerService.startPlayingPlaylist(this.playlistId, songInfo);
   }
 

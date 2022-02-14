@@ -87,6 +87,7 @@ export class AudioService {
    */
   public setUrl(src: string): void {
     this.audio.src = src;
+    this.playerStatus.next('songInit');
   }
 
   /**

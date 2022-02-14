@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces;
 using Domain.Common;
+using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Context;
 
@@ -62,5 +63,6 @@ namespace Persistence.v1
             await Context.SaveChangesAsync();
             return entity;
         }
+        
     }
 }

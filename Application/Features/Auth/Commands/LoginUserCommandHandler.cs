@@ -33,7 +33,8 @@ namespace Application.Features.Auth.Commands
         private async Task<bool> IsUserOk(string userName, string password)
         {
             var user = await _userRepository.GetByUsernameAsync(userName);
-            var passwordHash = hashGenerator.HashPassword(password);
+            var userSalt = user.Salt;
+            var passwordHash = hashGenerator.HashPassword(password, userSalt);
 
             if (user == null)
                 throw new UserNotFoundException($"{userName} doesn't exist in db");

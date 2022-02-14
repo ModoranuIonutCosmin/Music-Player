@@ -1,4 +1,4 @@
-import {Component, HostListener, OnInit, ViewChild} from '@angular/core';
+import {Component, EventEmitter, HostListener, OnInit, Output, ViewChild} from '@angular/core';
 import {Router} from "@angular/router";
 import {SearchService} from "../../../core/services/search/search.service";
 import {SearchResult} from "../../models/search-result";
@@ -17,6 +17,8 @@ export class SearchbarComponent {
 
   dropdownVisible: boolean = false;
   clickedOutside: boolean = false;
+
+  @Output() searchEvent: EventEmitter<string> = new EventEmitter<string>();
 
   currentSearchTerm$: Subject<string> = new Subject<string>()
 
@@ -72,15 +74,16 @@ export class SearchbarComponent {
   }
 
   search() {
-    console.log(this.searchBarInput);
     if (this.searchBarInput && this.searchBarInput.trim()) {
       this.router.navigate(['search', `${btoa(this.searchBarInput)}`]);
       this.dropdownVisible = false;
+      this.searchEvent.next('searched');
     }
   }
 
   openSearchSuggestions(searchResult: SearchResult): void {
-    console.log(searchResult);
+    this.searchEvent.next('searched');
+
     if (searchResult.type == 'album') {
       this.router.navigate(['/album/', searchResult.info.id]);
     } else {

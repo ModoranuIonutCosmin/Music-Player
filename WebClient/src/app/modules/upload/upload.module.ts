@@ -7,6 +7,14 @@ import {DirectivesModule} from "../directives/directives.module";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MaterialModule} from "../material/material.module";
 import {UploadService} from "../../core/services/upload/upload.service";
+import {
+  NbAccordionModule,
+  NbButtonModule,
+  NbIconModule,
+  NbInputModule,
+  NbProgressBarModule,
+  NbStepperModule
+} from "@nebular/theme";
 
 
 @NgModule({
@@ -19,7 +27,13 @@ import {UploadService} from "../../core/services/upload/upload.service";
     DirectivesModule,
     FormsModule,
     ReactiveFormsModule,
-    MaterialModule
+    MaterialModule,
+    NbInputModule,
+    NbIconModule,
+    NbButtonModule,
+    NbStepperModule,
+    NbAccordionModule,
+    NbProgressBarModule,
   ],
   providers: [UploadService]
 })

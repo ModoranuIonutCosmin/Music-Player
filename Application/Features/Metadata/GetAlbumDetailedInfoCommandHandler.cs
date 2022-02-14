@@ -19,7 +19,15 @@ public class GetAlbumDetailedInfoCommandHandler : IRequestHandler<GetAlbumDetail
     public async Task<AlbumResponseDTO> Handle(GetAlbumDetailedInfoCommand request, CancellationToken cancellationToken)
     {
         Album albumFullInfo = await albumRepository.GetAllAlbumInformationByAlbumId(request.AlbumId);
+        
+        AlbumResponseDTO result = mapper.Map<Album, AlbumResponseDTO>(albumFullInfo);
 
-        return mapper.Map<Album, AlbumResponseDTO>(albumFullInfo);
+        int songPosition = 0;
+        result.Songs.ForEach((song) =>
+        {
+            songPosition++;
+            song.Position = songPosition;
+        });
+        return result;
     }
 }

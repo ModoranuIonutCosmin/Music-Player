@@ -1,8 +1,11 @@
-
+@use '../../../../../themes' as *;
 
 section{
   display: flex;
   flex-direction: row;
+  background-color: nb-theme(color-basic-900);
+  padding: 25px;
+  width: 100%;
 }
 
 .infoPanel{

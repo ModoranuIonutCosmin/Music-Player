@@ -7,6 +7,7 @@ import { PlaylistExplorerComponent } from './pages/playlist-explorer/playlist-ex
 import {AlbumModule} from "../album/album.module";
 import {MaterialModule} from "../material/material.module";
 import {PlaylistsService} from "../../core/services/playlists/playlists.service";
+import {SharedModule} from "../../shared/shared.module";
 
 
 @NgModule({
@@ -14,12 +15,13 @@ import {PlaylistsService} from "../../core/services/playlists/playlists.service"
     YourPlaylistsComponent,
     PlaylistExplorerComponent
   ],
-  imports: [
-    CommonModule,
-    PlaylistRoutingModule,
-    AlbumModule,
-    MaterialModule
-  ],
+    imports: [
+        CommonModule,
+        PlaylistRoutingModule,
+        AlbumModule,
+        MaterialModule,
+        SharedModule
+    ],
   providers: [
     PlaylistsService
   ]

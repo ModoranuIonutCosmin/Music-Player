@@ -12,6 +12,7 @@ import {
 } from "../../../../core/services/music player/music-player-controller-facade.service";
 import {PlaylistsPopupComponent} from "../../../../shared/components/playlists-popup/playlists-popup.component";
 import {MatDialog} from "@angular/material/dialog";
+import {ToastrHelpersService} from "../../../../core/services/helpers/toastr-helpers.service";
 
 @Component({
   selector: 'app-album-explorer',
@@ -22,24 +23,7 @@ export class AlbumExplorerComponent implements OnInit {
   albumData!: AlbumInfo;
 
   songsData: SongInfo[] =
-    [{
-      coverImageUrl: "https://media.istockphoto.com/photos/vintage-vinyl-record-album-cover-mockup-flat-concept-picture-id1127565686?b=1&k=20&m=1127565686&s=170667a&w=0&h=OBvTbZEFPOwXQLGWAKODUXwX8VaiEbQvPWrNzfl5GUI=",
-      name: 'Song name here',
-      length: 100,
-      position: 1
-    },
-      {
-        coverImageUrl: "https://media.istockphoto.com/photos/vintage-vinyl-record-album-cover-mockup-flat-concept-picture-id1127565686?b=1&k=20&m=1127565686&s=170667a&w=0&h=OBvTbZEFPOwXQLGWAKODUXwX8VaiEbQvPWrNzfl5GUI=",
-        name: 'track #1 soundscape',
-        length: 1004001,
-        position: 2
-      },
-      {
-        coverImageUrl: "https://media.istockphoto.com/photos/vintage-vinyl-record-album-cover-mockup-flat-concept-picture-id1127565686?b=1&k=20&m=1127565686&s=170667a&w=0&h=OBvTbZEFPOwXQLGWAKODUXwX8VaiEbQvPWrNzfl5GUI=",
-        name: 'some music ',
-        length: 1002121,
-        position: 2
-      }];
+    [];
   albumId!: string
 
 
@@ -52,16 +36,15 @@ export class AlbumExplorerComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.params.pipe(mergeMap((v, index) => {
-      return this.albumService.getAlbumData(v['albumId']);
+      this.albumId = v['albumId'];
+
+      return this.albumService.getAlbumData(this.albumId);
     })).subscribe(data => {
       this.albumData = data;
       this.songsData = data.songs || [];
 
       this.songsData.forEach((value, index) =>
       {
-        value.position = index + 1;
-        console.log(value);
-        value.formattedLength = this.durationFormatter.formatLength(value.length);
         let coverUrl = value.coverImageUrl;
         if(!(coverUrl && coverUrl.trim())){
           value.coverImageUrl = data.coverImageUrl
@@ -71,6 +54,7 @@ export class AlbumExplorerComponent implements OnInit {
   }
 
   songPlayClicked(songInfo: SongInfo) {
+    console.log('playing' + JSON.stringify(songInfo));
     this.playerService.startPlayingAlbum(this.albumId, songInfo);
   }
 }

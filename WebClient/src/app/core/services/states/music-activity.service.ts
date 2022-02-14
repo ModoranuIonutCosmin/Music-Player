@@ -39,17 +39,36 @@ export class MusicActivityService {
                                    songSourceId: string) {
 
     if (this.latestUserActivity.value == undefined) {
-      this.storeLastActivity(type, "", 0, songInfo, false,
+      this.storeLastActivity(type, songSourceId, "", 0, songInfo, false,
         [songInfo.id || ""], [songInfo.position], "");
     }
+    console.log(songSourceId);
+    let currentActivity: MusicActivityModel =
+    { ...this.latestUserActivity.value,
+      songInfo              : songInfo,
+      sourceType            : type,
+      sourceId              : songSourceId,
+      songId                : songInfo.id,
+      previousSongId        : previousSongId,
+      isShuffled            : false,
+      songsPositionsHistory : songsPositionsHistory,
+      songsIdsHistory       : songsIdsHistory
+    }
 
+    this.latestUserActivity.next(currentActivity);
+
+    localStorage.setItem(this.lastActivityKey, JSON.stringify(currentActivity));
+  }
+
+  public updateCurrentPlayingSong(songInfo: SongInfo) {
     let currentActivity = this.latestUserActivity.value;
+
     currentActivity.songInfo = songInfo;
-    currentActivity.songId = songInfo.id;
-    currentActivity.albumId = type == 'album' ? songSourceId : "";
-    currentActivity.playListId = type == 'playlist' ? songSourceId : "";
-    currentActivity.previousSongId = previousSongId;
-    currentActivity.isShuffled = false;
+    currentActivity.songsPositionsHistory?.push(songInfo.position);
+    currentActivity.songsIdsHistory?.push(songInfo.id|| '');
+
+
+    this.latestUserActivity.next(currentActivity);
 
     localStorage.setItem(this.lastActivityKey, JSON.stringify(currentActivity));
   }
@@ -59,18 +78,29 @@ export class MusicActivityService {
 
     currentActivity.trackPosition = seekPos;
 
+    this.latestUserActivity.next(currentActivity);
+
     localStorage.setItem(this.lastActivityKey, JSON.stringify(currentActivity));
   }
 
-  public storeLastActivity(type: string, id: string, seekPos: number, songInfo: SongInfo,
+  public updateShuffleFlag(shuffleVal: boolean) {
+    let currentActivity = this.latestUserActivity.value;
+
+    currentActivity.isShuffled = shuffleVal;
+
+    this.latestUserActivity.next(currentActivity);
+
+    localStorage.setItem(this.lastActivityKey, JSON.stringify(currentActivity));
+  }
+
+  public storeLastActivity(type: string, sourceId: string, songId: string, seekPos: number, songInfo: SongInfo,
                            isShuffled: boolean, songsIdsHistory: Array<string>,
                            songsPositionsHistory: Array<number>,
                            previousSongId: ""): void {
     this.latestUserActivity.next(<MusicActivityModel>{
       songInfo: songInfo,
-      songId: type == "song" ? id : undefined,
-      playListId: type == "playList" ? id : undefined,
-      albumId: type == "album" ? id : undefined,
+      sourceType: type,
+      sourceId: sourceId,
       trackPosition: seekPos,
       isShuffled: isShuffled,
       songsIdsHistory: [],

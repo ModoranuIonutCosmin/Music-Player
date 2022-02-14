@@ -7,6 +7,8 @@ import {MaterialModule} from "../material/material.module";
 import { AlbumExplorerComponent } from './pages/album-explorer/album-explorer.component';
 import { AlbumInfoPanelComponent } from './components/album-info-panel/album-info-panel.component';
 import {AlbumService} from "../../core/services/media/album/album.service";
+import {NbButtonModule, NbIconModule} from "@nebular/theme";
+import {SharedModule} from "../../shared/shared.module";
 
 
 @NgModule({
@@ -15,11 +17,14 @@ import {AlbumService} from "../../core/services/media/album/album.service";
         AlbumExplorerComponent,
         AlbumInfoPanelComponent
     ],
-    imports: [
-        CommonModule,
-        AlbumRoutingModule,
-        MaterialModule
-    ],
+  imports: [
+    CommonModule,
+    AlbumRoutingModule,
+    MaterialModule,
+    NbIconModule,
+    NbButtonModule,
+    SharedModule
+  ],
     exports: [
         SongBrowserComponent
     ],

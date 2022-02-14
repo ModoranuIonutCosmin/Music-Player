@@ -34,7 +34,7 @@ namespace Persistence.Migrations
 
                     b.HasIndex("ArtistsId");
 
-                    b.ToTable("AlbumArtist");
+                    b.ToTable("AlbumArtist", (string)null);
                 });
 
             modelBuilder.Entity("ArtistSong", b =>
@@ -49,7 +49,7 @@ namespace Persistence.Migrations
 
                     b.HasIndex("SongsId");
 
-                    b.ToTable("ArtistSong");
+                    b.ToTable("ArtistSong", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Album", b =>
@@ -76,6 +76,9 @@ namespace Persistence.Migrations
                     b.Property<Guid?>("OwnerId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("Position")
+                        .HasColumnType("int");
+
                     b.Property<DateTimeOffset>("ReleaseDate")
                         .HasColumnType("datetimeoffset");
 
@@ -83,7 +86,7 @@ namespace Persistence.Migrations
 
                     b.HasIndex("OwnerId");
 
-                    b.ToTable("Albums");
+                    b.ToTable("Albums", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.ApplicationUser", b =>
@@ -112,6 +115,11 @@ namespace Persistence.Migrations
                         .HasMaxLength(130)
                         .HasColumnType("nvarchar(130)");
 
+                    b.Property<string>("Salt")
+                        .IsRequired()
+                        .HasMaxLength(130)
+                        .HasColumnType("nvarchar(130)");
+
                     b.Property<string>("UserName")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -119,7 +127,7 @@ namespace Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Artist", b =>
@@ -146,7 +154,30 @@ namespace Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Artists");
+                    b.ToTable("Artists", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Entities.NewsPost", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("BannerImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Body")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("DateCreated")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("News", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Playlist", b =>
@@ -169,7 +200,7 @@ namespace Persistence.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Playlists");
+                    b.ToTable("Playlists", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Song", b =>
@@ -201,7 +232,7 @@ namespace Persistence.Migrations
 
                     b.HasIndex("AlbumId");
 
-                    b.ToTable("Songs");
+                    b.ToTable("Songs", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Storage", b =>
@@ -236,7 +267,36 @@ namespace Persistence.Migrations
                     b.HasIndex("SongId")
                         .IsUnique();
 
-                    b.ToTable("StorageInfo");
+                    b.ToTable("StorageInfo", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Entities.Subscription", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ApplicationUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset>("ExpiryDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<DateTimeOffset>("PurchaseDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("UploadMinutesUsed")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId")
+                        .IsUnique();
+
+                    b.ToTable("Subscriptions", (string)null);
                 });
 
             modelBuilder.Entity("PlaylistSong", b =>
@@ -251,7 +311,7 @@ namespace Persistence.Migrations
 
                     b.HasIndex("SongsId");
 
-                    b.ToTable("PlaylistSong");
+                    b.ToTable("PlaylistSong", (string)null);
                 });
 
             modelBuilder.Entity("AlbumArtist", b =>
@@ -320,6 +380,17 @@ namespace Persistence.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Domain.Entities.Subscription", b =>
+                {
+                    b.HasOne("Domain.Entities.ApplicationUser", "ApplicationUser")
+                        .WithOne("Subscription")
+                        .HasForeignKey("Domain.Entities.Subscription", "ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
+                });
+
             modelBuilder.Entity("PlaylistSong", b =>
                 {
                     b.HasOne("Domain.Entities.Playlist", null)
@@ -343,6 +414,8 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.Entities.ApplicationUser", b =>
                 {
                     b.Navigation("Playlists");
+
+                    b.Navigation("Subscription");
                 });
 
             modelBuilder.Entity("Domain.Entities.Song", b =>

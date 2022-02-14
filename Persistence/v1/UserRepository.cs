@@ -20,6 +20,17 @@ namespace Persistence.v1
             return await Context.Users.Where(user => user.UserName == username)
                 .FirstOrDefaultAsync();
         }
+        
+        public async Task<ApplicationUser> GetByUsernameSubscriptionAsync(string username)
+        {
+            if (string.IsNullOrEmpty(username))
+                throw new ArgumentNullException(nameof(username), $"Username can't be null");
+
+            return await Context.Users
+                .Where(user => user.UserName == username)
+                    .Include(u => u.Subscription)
+                .FirstOrDefaultAsync();
+        }
 
         public async Task<ApplicationUser> GetByEmail(string email)
         {

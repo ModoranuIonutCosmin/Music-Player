@@ -4,9 +4,17 @@ import { CommonModule } from '@angular/common';
 import { AuthRoutingModule } from './auth-routing.module';
 import { LoginComponent } from './components/login/login.component';
 import {AuthenticationService} from "../../core/authentication/authentication.service";
-import {ReactiveFormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { RegisterComponent } from './components/register/register.component';
 import {MaterialModule} from "../material/material.module";
+import {
+  NbAlertModule,
+  NbButtonModule,
+  NbCheckboxModule,
+  NbInputModule,
+  NbToastrModule,
+  NbToastrService
+} from "@nebular/theme";
 
 
 @NgModule({
@@ -18,10 +26,18 @@ import {MaterialModule} from "../material/material.module";
     CommonModule,
     AuthRoutingModule,
     ReactiveFormsModule,
-    MaterialModule
+    MaterialModule,
+    NbInputModule,
+    NbAlertModule,
+    FormsModule,
+    ReactiveFormsModule,
+    NbCheckboxModule,
+    NbButtonModule,
+    NbToastrModule,
+    NbToastrModule.forRoot(),
   ],
   providers: [
-    AuthenticationService
+    NbToastrService
   ]
 })
 export class AuthModule { }

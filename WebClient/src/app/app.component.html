@@ -1,46 +1,14 @@
 <nb-layout>
 
   <nb-layout-header fixed>
-    <img class="siteLogo" src="https://www.pinclipart.com/picdir/middle/520-5202829_winamp-logo-png-clipart.png"/>
-    <ul class="linksList">
-      <li>
-        <a>Home</a>
-      </li>
-      <li>
-        <a [nbContextMenu]="this.exploreItems" [nbContextMenuPlacement]="contextMenuOpenDirection"
-           [nbContextMenuTrigger]="contextMenuOpenTrigger">
-          Explore
-        </a>
-        <nb-icon icon="chevron-down-outline"></nb-icon>
-      </li>
-      <li>
-        <a [nbContextMenu]="this.libraryItems" [nbContextMenuPlacement]="contextMenuOpenDirection"
-           [nbContextMenuTrigger]="contextMenuOpenTrigger">Library</a>
-        <nb-icon icon="chevron-down-outline"></nb-icon>
-      </li>
-
-    </ul>
-    <!-- Partea de search -->
-    <app-searchbar></app-searchbar>
-
-    <!-- Controale user -->
-
-    <ul class="userControls">
-      <button nbButton status="primary" outline >Upload</button>
-      <li [nbContextMenu]="this.usersControlsItems" [nbContextMenuPlacement]="contextMenuOpenDirection"
-          [nbContextMenuTrigger]="contextMenuOpenTrigger">
-        <nb-user name="{{this.currentUser$ | async}}" title="User"></nb-user>
-      </li>
-
-    </ul>
-
+    <app-header></app-header>
   </nb-layout-header>
   <nb-layout-column>
     <router-outlet></router-outlet>
   </nb-layout-column>
 
   <nb-layout-footer fixed>
-    <app-player></app-player>
+    <app-player #player></app-player>
   </nb-layout-footer>
 
 </nb-layout>

@@ -19,6 +19,6 @@ export class DurationFormatterService {
     var minutes = mm < 10 ? '0' + mm : `${mm}`;
     var seconds = ss < 10 ? '0' + ss : `${ss}`;
 
-    return hours + ":" + minutes + ":" + seconds;
+    return ((hours != "00") ? ( hours + ":") : "") + minutes + ":" + seconds;
   }
 }

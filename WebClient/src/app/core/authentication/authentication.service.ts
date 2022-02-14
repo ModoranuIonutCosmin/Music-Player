@@ -4,7 +4,7 @@ import {BehaviorSubject, Observable} from "rxjs";
 import {LoginResponse} from "./models/login-response";
 import {environment} from "../../../environments/environment";
 import {LoginRequest} from "./models/login-request";
-import {shareReplay, tap} from "rxjs/operators";
+import {flatMap, shareReplay, tap} from "rxjs/operators";
 import {RegisterRequest} from "./models/register-request";
 import {RegisterResponse} from "./models/register-response";
 import {ApiPaths} from "../../../environments/apiPaths";
@@ -14,7 +14,10 @@ export class AuthenticationService {
   user: BehaviorSubject<string> = new BehaviorSubject<string>('');
 
   constructor(private httpClient: HttpClient) {
-    this.user.next(this.getUsername());
+
+    if (this.isLoggedIn()) {
+      this.user.next(this.getUsername());
+    }
   }
 
   public login(username: string, password: string): Observable<LoginResponse> {
@@ -23,11 +26,13 @@ export class AuthenticationService {
       password: password
     }
 
-    console.log(environment.baseUrl)
     return this.httpClient
       .post<LoginResponse>(environment.baseUrl + ApiPaths.loginService,
         loginRequest)
-      .pipe(tap(res => AuthenticationService.setSession(res)),
+      .pipe(tap(res => {
+        AuthenticationService.setSession(res);
+        this.user.next(res.userName);
+      }),
         shareReplay());
   }
 
@@ -48,9 +53,8 @@ export class AuthenticationService {
   }
 
   public isLoggedIn() {
-    const today = new Date();
 
-    return this.getExpiration() >= today
+    return !!localStorage.getItem('id_token') && !!localStorage.getItem('expires_at');
   }
 
   getExpiration(): Date {
@@ -70,5 +74,6 @@ export class AuthenticationService {
   logout() {
     localStorage.removeItem("id_token");
     localStorage.removeItem("expires_at");
+    this.user.next('');
   }
 }

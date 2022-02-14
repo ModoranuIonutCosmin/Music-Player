@@ -1,33 +1,41 @@
 <h1>Search results for "{{this.dataSource.query}}":</h1>
 
 <main>
-  <section>
-    <header>
-      <h2>Albums</h2>
-    </header>
-    <div class="albums">
+  <div *ngIf="!noAlbums || !noSongs">
+    <section *ngIf="!noAlbums">
+      <header>
+        <h2>Albums</h2>
+      </header>
+      <div class="albums">
 
-      <div *ngFor="let element of this.dataSource.results.albums"
-           (click) ="navigateToAlbum(element.id || '')"
-           class="albums__results">
-        <img src="{{element.coverImageUrl}}" alt="album"/>
-        <p>{{element.name}}</p>
+        <div *ngFor="let element of this.dataSource.results.albums"
+             (click)="navigateToAlbum(element.id || '')"
+             class="albums__results">
+          <img src="{{element.coverImageUrl}}" alt="album"/>
+          <p>{{element.name}}</p>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section>
-    <header>
-      <h2>Songs</h2>
-    </header>
-    <div class="songs">
-      <div *ngFor="let element of this.dataSource.results.songs"
-           class="songs__results"
-          (click)="navigateToSong(element.id || '')">
-        <img src="{{element.coverImageUrl}}" alt="song"/>
-        <p>{{element.name}}</p>
+    <section *ngIf="!noSongs">
+      <header>
+        <h2>Songs</h2>
+      </header>
+      <div class="songs">
+        <div *ngFor="let element of this.dataSource.results.songs"
+             class="songs__results"
+             (click)="navigateToSong(element.id || '')">
+          <img src="{{element.coverImageUrl}}" alt="song"/>
+          <p>{{element.name}}</p>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
+
+  </div>
+
+
+  <div>
+
+  </div>
 </main>
 

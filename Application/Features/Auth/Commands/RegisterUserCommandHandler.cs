@@ -1,5 +1,8 @@
 ﻿using Application.Interfaces;
+using Application.Services;
 using AutoMapper;
+using Domain.Datamodels;
+using Domain.Entities;
 using Domain.Exceptions;
 using MediatR;
 using Domain.Models;
@@ -10,16 +13,19 @@ namespace Application.Features.Auth.Commands
     {
         private readonly IUserRepository _userRepository;
         private readonly IEmailSyntaxValidator _emailSyntaxValidator;
+        private readonly ISubscriptionsService _subscriptionsService;
         private readonly IMapper _mapper;
         private readonly IPasswordHashGenerator hashGenerator;
 
         public RegisterUserCommandHandler(IUserRepository userRepository,
             IEmailSyntaxValidator emailSyntaxValidator,
+            ISubscriptionsService subscriptionsService,
             IMapper mapper,
             IPasswordHashGenerator hashGenerator)
         {
             _userRepository = userRepository;
             _emailSyntaxValidator = emailSyntaxValidator;
+            _subscriptionsService = subscriptionsService;
             _mapper = mapper;
             this.hashGenerator = hashGenerator;
         }
@@ -49,11 +55,16 @@ namespace Application.Features.Auth.Commands
                 throw new UserEmailTakenException($"Email {requestModel.Email} is bound to another account!");
 
             var newUser = _mapper.Map<RegisterUserCommand, Domain.Entities.ApplicationUser>(requestModel);
-
-            newUser.PasswordHash = hashGenerator.HashPassword(requestModel.Password);
+            var newSalt = hashGenerator.GenerateSalt();
+            
+            newUser.Salt = Convert.ToHexString(newSalt);
+            newUser.PasswordHash = hashGenerator.HashPassword(requestModel.Password, newUser.Salt);
+            newUser.Subscription = new Subscription();
 
             await _userRepository.AddAsync(newUser);
 
+            _subscriptionsService.GrantSubscriptionPlan(newUser.Id, SubscriptionType.FREE);
+            
             return _mapper.Map<RegisterUserCommand, RegisterResponseDTO>(requestModel);
         }
     }

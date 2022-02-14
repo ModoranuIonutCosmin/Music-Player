@@ -1,3 +1,22 @@
+@use '../../../../../themes' as *;
+
+.container{
+  background-color: nb-theme(color-basic-700);
+
+  mat-row:hover{
+    background-color: nb-theme(color-basic-600);
+    p{
+      color: nb-theme(color-primary-900);
+    }
+  }
+}
+mat-cell{
+  border: 0 !important;
+}
+mat-row{
+  padding: 0 15px;
+  border: 0 !important;
+}
 .nameCell {
   text-align: left;
   word-break: break-word;
@@ -10,8 +29,9 @@
 }
 
 .mat-column-coverImg{
-  width: 60px;
-  flex: 0 0 60px;
+  width: 50px;
+  flex: 0 0 50px;
+  padding-left: 0;
 }
 
 .mat-column-position {
@@ -25,23 +45,27 @@
   flex: 0 0 70px;
 }
 
-.mat-column-name {
-  flex: 0 0 80%;
-}
-
 .mat-column-controls {
   width: 50px;
   flex: 0 0 50px;
   margin: 0 !important;
   padding: 0 !important;
+  border: 0 !important;
+
+  button{
+    margin: 0 auto;
+    width: 30px !important;
+    height: 30px !important;
+  }
 }
 
 
 .coverImage {
-  max-width: 40px;
+  width: 50px;
 }
 
 .controls{
+  padding: 0;
   button{
     padding: 0 !important;
     margin: 0 !important;
@@ -49,48 +73,23 @@
 }
 
 
+@media (max-width: 500px) {
 
-@media (min-width: 800px) and (max-width: 1100px){
-
-  .nameCell {
-    max-width: 900px;
-  }
-}
-
-
-
-@media (min-width: 600px) and (max-width: 799px) {
-
-  .nameCell {
-    max-width: 380px;
-  }
-}
-
-@media (min-width: 400px) and (max-width: 600px) {
-
-  .nameCell {
-    max-width: 170px;
-  }
-}
-
-@media (max-width: 399px) {
-
-  .nameCell {
-    max-width: 125px;
+  mat-row{
+    font-size: 0.9em !important;
+    p{
+      font-size: 0.8em !important;
+    }
   }
 
-  .coverImage {
-    visibility: collapse;
-  }
-
-  .mat-column-controls{
-    margin-left: 5px;
+  .nameCell{
+    p {
+      white-space: normal;
+    }
   }
 
   .mat-column-coverImg{
-    width: 0;
-    flex: 0 0 0px;
-    padding: 0;
+    display: none;
   }
 }
 

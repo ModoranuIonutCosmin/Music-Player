@@ -3,6 +3,7 @@ import {AbstractControl, Form, FormArray, FormBuilder, FormControl, FormGroup, V
 import {UploadService} from "../../../../core/services/upload/upload.service";
 import {FileUploadInfo} from "../../models/file-upload-info";
 import {HttpEventType, HttpResponse} from "@angular/common/http";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-album-upload',
@@ -16,6 +17,10 @@ export class AlbumUploadComponent implements OnInit {
   albumId: string = "";
   songIds: Array<string> =[];
 
+  successful: boolean = true;
+
+  stepperIndex: number = 0;
+
   albumInfo: FormGroup = this.fb.group({
     name: ['', Validators.required],
     coverImageUrl: [''],
@@ -25,10 +30,31 @@ export class AlbumUploadComponent implements OnInit {
   })
 
   constructor(private fb: FormBuilder,
-              private uploadService: UploadService) {
+              private uploadService: UploadService,
+              private router: Router) {
   }
 
   ngOnInit(): void {
+  }
+
+  navigateToEditMetadata() {
+    this.stepperIndex = 1;
+    this.scrollToTop()
+  }
+
+  navigateToFinishUpload() {
+    this.stepperIndex = 2;
+    this.scrollToTop()
+  }
+
+  scrollToTop() {
+    (function smoothscroll() {
+      var currentScroll = document.documentElement.scrollTop || document.body.scrollTop;
+      if (currentScroll > 0) {
+        window.requestAnimationFrame(smoothscroll);
+        window.scrollTo(0, currentScroll - (currentScroll / 8));
+      }
+    })();
   }
 
   getSongs(): FormArray {
@@ -41,7 +67,7 @@ export class AlbumUploadComponent implements OnInit {
 
   newSong(name: string): FormGroup {
     return this.fb.group({
-      name: [name, Validators.required],
+      name: ['', Validators.required],
       artists: this.fb.array([this.fb.group({
         artistName: ['', Validators.required],
         firstName: [''],
@@ -104,12 +130,17 @@ export class AlbumUploadComponent implements OnInit {
   }
 
   removeFile(ordinal: number) {
+    console.log(this.songFiles)
     this.removeSongAtIndex(ordinal);
-    this.songFiles.slice(ordinal);
+    this.songFiles.splice(ordinal, 1);
+    console.log('removed at ' + ordinal)
+    console.log(this.songFiles)
   }
 
   initFileUpload(): void {
     let albumPayload: any = this.albumInfo.value;
+
+    albumPayload.songs.forEach((song: any, index: number) => song.position = index + 1);
 
     albumPayload.releaseDate = new Date(albumPayload.releaseDate).toJSON()
 
@@ -124,7 +155,6 @@ export class AlbumUploadComponent implements OnInit {
           this.albumId = result.id || "";
           this.currentFile = 0;
         }
-
         this.uploadNextFile();
       })
 
@@ -134,6 +164,7 @@ export class AlbumUploadComponent implements OnInit {
     console.log(this.songIds);
 
     if (this.currentFile >=  this.songIds.length) {
+      this.navigateToFinishUpload();
       return;
     }
 
@@ -148,14 +179,24 @@ export class AlbumUploadComponent implements OnInit {
             console.log('File is completely loaded!');
             this.currentFile++;
             this.uploadNextFile()
+
           }
         },
         (err) => {
+          this.successful = false;
           console.log("Upload Error:", err);
           this.songFiles[this.currentFile].failed = true;
         }, () => {
           console.log("Upload done");
         })
+  }
+
+  seeAlbum() {
+    this.router.navigate(['/album', this.albumId]);
+  }
+
+  artistInputPlaceholder(artistIndex: number): string {
+    return `Artist ${artistIndex + 1} name`
   }
 }
 
