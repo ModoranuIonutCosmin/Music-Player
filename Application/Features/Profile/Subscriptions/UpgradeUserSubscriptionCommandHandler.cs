@@ -33,7 +33,12 @@ public class UpgradeUserSubscriptionCommandHandler: IRequestHandler<UpgradeUserS
             .GetByUsernameSubscriptionAsync(request.RequestingUser.UserName);
         
         _subscriptionsService.GrantSubscriptionPlan(userRequesting.Id, request.SubscriptionType, 30);
+
+        var result = _mapper.Map<ApplicationUser, UserProfileModel>(userRequesting);
         
-        return _mapper.Map<ApplicationUser, UserProfileModel>(userRequesting);
+        result.Subscription.UploadMinutesMax =
+            _subscriptionsService.GetUploadMinutesForSubscription(result.Subscription.Type);
+
+        return result;
     }
 }

@@ -1,8 +1,11 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {AudioService} from "./core/services/music player/audio.service";
 
 const routes: Routes = [
+  {
+    path: 'home',
+    loadChildren: () => import('./modules/home/home.module').then(m => m.HomeModule)
+  },
   {
     path: 'auth',
     loadChildren: () => import('./modules/auth/auth.module').then(m => m.AuthModule)
@@ -30,7 +33,11 @@ const routes: Routes = [
   {
     path: 'playlist',
     loadChildren: () => import('./modules/playlist/playlist.module').then(m => m.PlaylistModule)
-  }
+  },
+  {
+    path: 'profile',
+    loadChildren: () => import('./modules/profile/profile.module').then(m => m.ProfileModule)
+  },
 ];
 
 @NgModule({

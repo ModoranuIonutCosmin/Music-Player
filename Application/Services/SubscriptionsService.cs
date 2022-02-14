@@ -39,8 +39,12 @@ public class SubscriptionsService : ISubscriptionsService
         {
             return false;
         }
+
+        var subscriptionType = userSubscription.ExpiryDate < DateTimeOffset.UtcNow
+            ? userSubscription.Type
+            : SubscriptionType.FREE;
         
-        decimal subscriptionMax = GetUploadMinutesForSubscription(userSubscription.Type);
+        decimal subscriptionMax = GetUploadMinutesForSubscription(subscriptionType);
         decimal usedMinutes = userSubscription.UploadMinutesUsed;
 
         return (subscriptionMax - uploadMinutesCount - usedMinutes) >= 0;
@@ -59,7 +63,7 @@ public class SubscriptionsService : ISubscriptionsService
             case SubscriptionType.PRO:
                 return 60;
             case SubscriptionType.FOUNDERS:
-                return 3000;
+                return 90;
             default:
                 return 0;
         }

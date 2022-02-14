@@ -6,6 +6,7 @@ import {filter, map} from "rxjs/operators";
 import {PlayerComponent} from "../player/player.component";
 import {HeaderService} from "../../../core/header/header.service";
 import {animate, style, transition, trigger} from "@angular/animations";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-header',
@@ -45,7 +46,8 @@ export class HeaderComponent implements OnInit{
   currentUser$: BehaviorSubject<string>;
 
   constructor(private authenticationService: AuthenticationService,
-              private nbMenuService: NbMenuService) {
+              private nbMenuService: NbMenuService,
+              private router: Router) {
     this.currentUser$ = this.authenticationService.user;
   }
 
@@ -58,6 +60,10 @@ export class HeaderComponent implements OnInit{
       .subscribe(title => {
         if (this.usersControlsItems[2].title === title) {
           this.authenticationService.logout();
+        }
+
+        if (this.usersControlsItems[1].title === title) {
+          this.router.navigate(['/profile'])
         }
       });
   }

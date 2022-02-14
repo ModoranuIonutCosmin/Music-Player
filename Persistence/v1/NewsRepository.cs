@@ -14,9 +14,14 @@ public class NewsRepository : Repository<NewsPost>, INewsRepository
     public async Task<List<NewsPost>> LoadNewsPage(int page, int count)
     {
         return await Context.News
-            .OrderBy(e => e.DateCreated)
+            .OrderByDescending(e => e.DateCreated)
             .Skip(page * count)
             .Take(count)
             .ToListAsync();
+    }
+
+    public async Task<long> GetPostsCount()
+    {
+        return await this.Context.News.CountAsync();
     }
 }

@@ -8,4 +8,5 @@ public class SubscriptionModel
     public DateTimeOffset ExpiryDate { get; set; }
     public DateTimeOffset PurchaseDate { get; set; }
     public decimal UploadMinutesUsed { get; set; }
+    public decimal UploadMinutesMax { get; set; }
 }
