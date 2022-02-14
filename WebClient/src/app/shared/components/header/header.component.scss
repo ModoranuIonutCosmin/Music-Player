@@ -6,6 +6,10 @@ main {
   flex-direction: row;
   align-items: center;
 
+  a{
+    text-decoration: none;
+  }
+
   .hamburgerMenu {
     display: none;
     margin: 0 15px;

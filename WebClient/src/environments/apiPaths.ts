@@ -1,9 +1,12 @@
 export enum ApiPaths {
   loginService = "/login",
   registerService = "/register",
+
   mediaService = "/mediaServe",
+
   albumInfoGet = "/mediaMetadata/album",
   songInfoGet = "/mediaMetadata/song",
+
   searchResultsGet = "/mediaSearch/search",
 
   uploadAlbumPost = "/MediaUpload",
@@ -15,4 +18,10 @@ export enum ApiPaths {
   deleteSong = "/Playlist/deleteSong",
   playlistByIdGet = "/Playlist/playlist",
   myPlaylistsGet = "/Playlist/myPlaylists",
+
+
+  profileInfo = "/UserProfile/profile",
+  profileSubcriptionUpgrade = "/UserProfile/subscriptions/upgrade",
+
+  newsPosts = "/News/latest"
 }
