@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {AuthenticationService} from "../../../../core/authentication/authentication.service";
 import {Router} from "@angular/router";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {NbGlobalPhysicalPosition, NbToastrService} from "@nebular/theme";
 
 @Component({
   selector: 'app-register',
@@ -13,11 +14,15 @@ export class RegisterComponent implements OnInit {
 
   form: FormGroup;
 
-  errorMessage: string = "";
+  user: any = {};
+  rememberMe = false;
+  submitted = false;
+  redirectDelay = 3000;
+  errors: string[] = [];
 
   constructor(private fb: FormBuilder, private authService : AuthenticationService,
               private router: Router,
-              private snackBar: MatSnackBar) {
+              private toastrService: NbToastrService) {
     this.form = this.fb.group({
       username: ["", Validators.required],
       firstName: ["", Validators.required],
@@ -37,16 +42,18 @@ export class RegisterComponent implements OnInit {
     if(this.form.valid) {
       this.authService.register(value)
         .subscribe((res) => {
-          console.log(res);
-          this.snackBar.open("Registered user " + res.userName, "OK")
-          this.router.navigate(['auth/login'])
+          setTimeout(() => {
+            return this.router.navigate(['auth/login'])
+          }, this.redirectDelay);
+          this.showMessage(NbGlobalPhysicalPosition.BOTTOM_RIGHT, 'success', 'Registration was succesful! Welcome aboard.')
         }, error => {
           console.log(error)
-          this.errorMessage = error.error.detail
-          this.snackBar.open(error.error.detail, "OK")
+          this.errors = [error.error.detail];
         })
     }
 
   }
-
+  showMessage(position: NbGlobalPhysicalPosition, status: string, message: string) {
+    this.toastrService.show(status || 'Success', `${message}`, { position, status });
+  }
 }

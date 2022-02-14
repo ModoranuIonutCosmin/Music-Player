@@ -31,7 +31,6 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-
 //cors 
 builder.Services.AddCors(options =>
 {
@@ -51,6 +50,7 @@ builder.Services.AddApplication();
 builder.Services.AddTransient<IEmailSyntaxValidator, EmailSyntaxValidator>();
 builder.Services.AddTransient<IPasswordHashGenerator, PasswordHashGenerator>();
 builder.Services.AddTransient<IRemoteDiskStorageService, AwsS3Service>();
+builder.Services.AddTransient<ISubscriptionsService, SubscriptionsService>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>

@@ -13,6 +13,9 @@ export class SearchResultsComponent implements OnInit {
   PAGE_COUNT: number = 10;
   currentPage: number = 0;
 
+  noAlbums: boolean = true;
+  noSongs: boolean = true;
+
   @Input() dataSource: SearchResults;
 
   constructor(private searchService: SearchService,
@@ -39,6 +42,8 @@ export class SearchResultsComponent implements OnInit {
         return this.searchService.getSearchResults(searchQuery, this.PAGE_COUNT, this.currentPage);
       })).subscribe(data => {
         this.dataSource = data;
+        this.noAlbums = data.albumEntries == 0;
+        this.noSongs = data.songEntries == 0;
       });
 
     }

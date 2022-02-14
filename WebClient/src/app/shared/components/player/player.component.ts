@@ -5,7 +5,11 @@ import {
   MusicPlayerControllerFacadeService
 } from "../../../core/services/music player/music-player-controller-facade.service";
 import {MusicActivityModel} from "../../models/music-activity-model";
-import {DurationFormatterService} from "../../../core/services/helpers/duration-formatter.service";
+import {PlaylistsPopupComponent} from "../playlists-popup/playlists-popup.component";
+import {MatDialog} from "@angular/material/dialog";
+import {MatSnackBar} from "@angular/material/snack-bar";
+import {NbGlobalPhysicalPosition, NbToastrService} from "@nebular/theme";
+import {ToastrHelpersService} from "../../../core/services/helpers/toastr-helpers.service";
 
 @Component({
   selector: 'app-player',
@@ -20,40 +24,20 @@ export class PlayerComponent implements OnInit {
   @Input() shuffled: boolean = false;
   songInfo: SongInfo;
 
-  trackPosition: string;
-  totalTrackTime: string;
-  trackPositionMsec: number = 0;
+  trackPositionMsec: number = 0; // 1 sec = 10e7 ticks ca unitate
+                                 // de masura (sau nr tick-uri TimeSpan .net intr-o secunda)
   totalTrackTimeMsec: number = 0;
 
   albumId: string | undefined;
   playerStatus: BehaviorSubject<string>
   userActivity: BehaviorSubject<MusicActivityModel>
 
-  // @HostListener('document:keyup', ['$event'])
-  // handleNonHoldingKeyPresses(event: KeyboardEvent) {
-  //   if (event.key == ' ') {
-  //     console.log(event.target);
-  //     this.playSong();
-  //   }
-  // }
-  // @HostListener('document:keydown', ['$event'])
-  // handleKeyboardEvent(event: KeyboardEvent) {
-  //   if (event.key == 'ArrowLeft') {
-  //     this.playerService.seekSkipMiliseconds(this.ARROW_SKIP_MSEC, false);
-  //   }
-  //
-  //   if (event.key == 'ArrowRight') {
-  //     this.playerService.seekSkipMiliseconds(this.ARROW_SKIP_MSEC, true);
-  //   }
-  // }
-
   constructor(public playerService: MusicPlayerControllerFacadeService,
-              public durationFormatter: DurationFormatterService) {
+              private dialog: MatDialog,
+              private toastrService: ToastrHelpersService) {
     this.playerStatus = playerService.getPlayerStatusStream();
     this.userActivity = playerService.getUserActivity();
 
-    this.trackPosition= "0:00";
-    this.totalTrackTime = "0:00";
     this.songInfo = {
       position: 0,
       coverImageUrl: "",
@@ -62,32 +46,49 @@ export class PlayerComponent implements OnInit {
     };
   }
 
+
+  openDialog(songId: string) {
+    const dialogRef = this.dialog.open(PlaylistsPopupComponent, {
+      data: {songId: songId}
+    });
+
+    dialogRef.afterClosed().subscribe((result: any) => {
+      if (result == 1) {
+
+        this.toastrService.showMessage(NbGlobalPhysicalPosition.BOTTOM_RIGHT, 'success', 'Song was added to playlist succesfully');
+      } else {
+        this.toastrService.showMessage(NbGlobalPhysicalPosition.BOTTOM_RIGHT, 'danger', 'Couldnt add song to playlist' );
+      }
+    });
+  }
+
   ngOnInit(): void {
     this.playerStatus.subscribe(status => {
-      if (status == "ended" || status == "pause" || status == "waiting") {
-        this.paused = true;
-      } else if (status == "playing") {
-        this.paused = false;
-      }
+      // if (status == "ended" || status == "pause" || status == "waiting") {
+      //   this.paused = true;
+      // } else if (status == "playing") {
+      //   this.paused = false;
+      // }
+      console.log('player status' + status);
+      this.paused = status != "playing";
     });
     this.userActivity.subscribe(activity => {
         this.songInfo = activity.songInfo || this.songInfo;
         this.shuffled = activity.isShuffled || false;
-        this.totalTrackTime = this.durationFormatter.formatLength((activity.songInfo?.length   || 0));
-        this.totalTrackTimeMsec = (activity.songInfo?.length   || 0) / 10000;
-        console.log(this.songInfo);
+        this.totalTrackTimeMsec = (activity.songInfo?.length   || 0);
+        this.trackPositionMsec = (activity.trackPosition || 0) * 10000000;
     })
 
     timer(0, 500)
       .subscribe(_ => {
-        this.trackPositionMsec = (this.userActivity.value.trackPosition || 0) * 1000;
+
+        this.trackPositionMsec = (this.userActivity.value.trackPosition || 0) * 10000000;
         this.songInfo = (this.userActivity.value.songInfo) || this.songInfo;
-        this.trackPosition = this.durationFormatter.formatLength(this.trackPositionMsec * 10000 );
       })
   }
 
   progressPercent(): number {
-    return (this.trackPositionMsec / (this.totalTrackTimeMsec + 0.00001)) * 100;
+    return (this.trackPositionMsec/ (this.totalTrackTimeMsec + 0.00001)) * 100;
   }
 
   seek(event: any): void {
@@ -98,7 +99,7 @@ export class PlayerComponent implements OnInit {
     let clickDistance = clickX - progressBarRect.left;
 
     let percentSeek = clickDistance / (progressBarWidth + 0.0001);
-    this.playerService.seekToPercentage((this.totalTrackTimeMsec / 1000) * percentSeek);
+    this.playerService.seekToPercentage((this.totalTrackTimeMsec / 10_000_000) * percentSeek);
   }
 
   playSong() {
@@ -113,5 +114,18 @@ export class PlayerComponent implements OnInit {
     console.log('Punem melodie sa cante!');
     this.paused = !this.paused;
     this.playerService.resumeCurrentSong();
+  }
+
+  playNextSong() {
+    this.playerService.playNextSong();
+  }
+
+  playPreviousSong() {
+    this.playerService.playPreviousSong();
+  }
+
+  toggleShuffle() {
+    this.shuffled = !this.shuffled;
+    this.playerService.toggleShuffle(this.shuffled);
   }
 }

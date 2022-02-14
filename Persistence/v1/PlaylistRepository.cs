@@ -16,6 +16,8 @@ namespace Persistence.v1
             return await Context.Playlists
                 .Where(p => p.Id.Equals(playlistId))
                 .Include(p => p.Songs)
+                    .ThenInclude(s => s.Artists)
+                .AsSplitQuery()
                 .SingleOrDefaultAsync();
         }
 

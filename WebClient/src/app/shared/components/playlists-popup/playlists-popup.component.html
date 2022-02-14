@@ -1,7 +1,11 @@
 <main >
 
   <div class="container">
-    <h2 mat-dialog-title>Add a playlist</h2>
+    <h2 class = "h2" mat-dialog-title>Add a playlist</h2>
+    <p class="text-hint">Select a playlist to add this song to.</p>
+    <input type="text" nbInput fullWidth status="basic" placeholder="Filter playlists"
+           (input) ="filterPlaylists()" [(ngModel)]="filterText"
+    />
 
     <mat-dialog-content class="mat-typography">
       <div class="playlist" (click) = "addNewPlaylist()" >
@@ -11,15 +15,17 @@
                [(ngModel)]="enteredName"/>
       </div>
 
-      <div class = "playlist" *ngFor="let playlist of this.dataSource.playlists"
+      <div class = "playlist" *ngFor="let playlist of this.filteredPlaylists"
       (click) = "addSongToPlaylist(playlist.id)">
         <img src="http://simpleicon.com/wp-content/uploads/playlist.png"/>
         <p>{{playlist.name}}</p>
       </div>
     </mat-dialog-content>
     <mat-dialog-actions align="end">
-      <button mat-button mat-dialog-close>Cancel</button>
-      <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Install</button>
+      <button mat-button mat-dialog-close>
+        Cancel
+      </button>
+      <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Ok</button>
     </mat-dialog-actions>
   </div>
 </main>

@@ -5,6 +5,11 @@ import {MusicActivityService} from "../states/music-activity.service";
 import {MusicActivityModel} from "../../../shared/models/music-activity-model";
 import {MediaService} from "../media/media.service";
 import {SongInfo} from "../../../modules/album/models/song-info";
+import {NextSongService} from "./next-song.service";
+import {SongService} from "../media/songs/song.service";
+import {switchMap} from "rxjs/operators";
+import {AlbumService} from "../media/album/album.service";
+import {PlaylistsService} from "../playlists/playlists.service";
 
 @Injectable()
 export class MusicPlayerControllerFacadeService {
@@ -13,13 +18,18 @@ export class MusicPlayerControllerFacadeService {
 
   constructor(private audioService: AudioService,
               private musicActivityService: MusicActivityService,
-              private mediaService: MediaService) {
+              private mediaService: MediaService,
+              private nextSongService: NextSongService,
+              private songService: SongService,
+              private albumService: AlbumService,
+              private playlistService: PlaylistsService) {
     this.playerStatus = audioService.playerStatus;
     this.latestUserActivity = musicActivityService.latestUserActivity;
 
     this.playerStatus.subscribe(status => {
       if (status == 'ended') {
-        //determina urmatoarea melodie
+        //determina urmatoarea melodie si fa play
+        this.playNextSong();
       }
     })
 
@@ -57,19 +67,21 @@ export class MusicPlayerControllerFacadeService {
   }
 
   startPlayingAlbum(albumId: string, songInfo: SongInfo): void {
+    this.musicActivityService.updateCurrentSongActivity('album', songInfo, [songInfo.id || ""],
+      [songInfo.position], "", albumId || "");
+
     this.mediaService.getSongUrl(songInfo?.id || "")
       .subscribe(url => {
-        this.musicActivityService.updateCurrentSongActivity('album', songInfo, [songInfo.id || ""],
-          [songInfo.position], "", albumId || "");
         this.audioService.setAudio(url.url);
       })
   }
 
   startPlayingPlaylist(playlistId: string, songInfo: SongInfo): void {
+    this.musicActivityService.updateCurrentSongActivity('playlist', songInfo, [songInfo.id || ""],
+      [songInfo.position], "", playlistId || "");
+
     this.mediaService.getSongUrl(songInfo?.id || "")
       .subscribe(url => {
-        this.musicActivityService.updateCurrentSongActivity('playlist', songInfo, [songInfo.id || ""],
-          [songInfo.position], "", playlistId || "");
         this.audioService.setAudio(url.url);
       })
   }
@@ -98,24 +110,62 @@ export class MusicPlayerControllerFacadeService {
     this.audioService.seekAudio(currentProgress + secondsAddedQuanity);
   }
 
-
-
-  playSongFromTheBeginningOrThePreviousSong(): void {
-    let activity = this.latestUserActivity.value;
-
-    if (activity.trackPosition != undefined && activity.trackPosition <= 500) {
-      //Pune melodia de canta inainte (daca exista).
-      if (!activity.previousSongId) {
-        // this.son
-      }
-
-    } else {
-      //Pune melodia curenta de la inceput.
-      this.audioService.seekAudio(0)
-    }
+  toggleShuffle(shuffleValue: boolean) {
+    this.musicActivityService.updateShuffleFlag(shuffleValue);
   }
 
-  playNextSong(): void {
+  playPreviousSong(): void {
+    let playedSongs = this.latestUserActivity.value.songsIdsHistory || [];
+    let songSource = this.latestUserActivity.value.sourceType;
+    let songSourceId = this.latestUserActivity.value.sourceId;
 
+    if (playedSongs.length < 2) {
+      return;
+    }
+    playedSongs.pop();
+    let songToPlay = playedSongs.length - 1;
+
+    while(songToPlay >= 0 && playedSongs[songToPlay] == this.latestUserActivity.value.songInfo?.id) {
+      songToPlay--;
+    }
+
+    if (songToPlay == -1) {
+      return;
+    }
+    if (songSource == 'album') {
+      this.albumService.getSongPositionInAlbum(songSourceId || '', playedSongs[songToPlay])
+        .pipe(switchMap((value, index) => {
+          this.musicActivityService.updateCurrentPlayingSong(value);
+
+          return this.mediaService.getSongUrl(value.id || '');
+        })).subscribe((url) => {
+        this.audioService.setAudio(url.url);
+      });
+    } else {
+      this.playlistService.getSongPositionInPlaylist(songSourceId || '', playedSongs[songToPlay])
+        .pipe(switchMap((value, index) => {
+          this.musicActivityService.updateCurrentPlayingSong(value);
+
+          return this.mediaService.getSongUrl(value.id || '');
+        })).subscribe((url) => {
+        this.audioService.setAudio(url.url);
+      });
+    }
+
+
+  }
+
+
+  playNextSong(): void {
+    this.nextSongService
+      .determineNextSong(this.latestUserActivity.value)
+      .subscribe(song => {
+        console.log('next song ' + song);
+        this.musicActivityService.updateCurrentPlayingSong(song);
+        this.mediaService.getSongUrl(song.id || "")
+          .subscribe(result => {
+            this.audioService.setAudio(result.url);
+          })
+      });
   }
 }

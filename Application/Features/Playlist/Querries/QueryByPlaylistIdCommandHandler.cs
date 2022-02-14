@@ -35,6 +35,15 @@ public class QueryByPlaylistIdCommandHandler : IRequestHandler<QueryByPlaylistId
             throw new UnauthorizedAccessException("This playlist is private!");
         }
         
-        return _mapper.Map<Domain.Entities.Playlist, PlaylistModel>(playlist);
+        PlaylistModel result = _mapper.Map<Domain.Entities.Playlist, PlaylistModel>(playlist);
+        
+        int songPosition = 0;
+        result.Songs.ForEach((song) =>
+        {
+            songPosition++;
+            song.Position = songPosition;
+        });
+
+        return result;
     }
 }

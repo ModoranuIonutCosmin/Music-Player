@@ -1,5 +1,6 @@
 ﻿using Application.Audio_File_Tagging;
 using Application.Interfaces;
+using Application.Services;
 using Domain.Entities;
 using Domain.Exceptions;
 using Domain.Models;
@@ -10,21 +11,24 @@ namespace Application.Features.Upload
 {
     public class UploadFileCommandHandler : IRequestHandler<UploadFileCommand, UploadFilesResponseDTO>
     {
-        public const int TRANSFER_LIMIT = 16_000_000;
+        public const int TRANSFER_LIMIT = 100_000_000;
         private readonly IRemoteDiskStorageService diskStorageService;
         private readonly IAlbumRepository albumRepository;
         private readonly IStorageInfoRepository storageInfoRepository;
         private readonly ISongRepository songRepository;
+        private readonly ISubscriptionsService _subscriptionsService;
 
         public UploadFileCommandHandler(IRemoteDiskStorageService diskStorageService,
             IAlbumRepository albumRepository,
             IStorageInfoRepository storageInfoRepository,
-            ISongRepository songRepository)
+            ISongRepository songRepository,
+            ISubscriptionsService subscriptionsService)
         {
             this.diskStorageService = diskStorageService;
             this.albumRepository = albumRepository;
             this.storageInfoRepository = storageInfoRepository;
             this.songRepository = songRepository;
+            _subscriptionsService = subscriptionsService;
         }
 
         public async Task<UploadFilesResponseDTO> Handle(UploadFileCommand request, CancellationToken cancellationToken)
@@ -63,9 +67,6 @@ namespace Application.Features.Upload
             {
                 await request.FileStream.CopyToAsync(memoryStream, cancellationToken);
 
-                await diskStorageService.UploadSmallFile(memoryStream, "songs/" + newSongId, request.Bucket,
-                    request.AccessKey, request.SecretKey);
-
                 //TODO: -Facut servicii pentru fiecare lucru diferit
                 // -identificare tip fisier dupa header-ul din binary.
 
@@ -75,8 +76,20 @@ namespace Application.Features.Upload
                 IFileAbstraction file = new SimpleAudioFileAbstraction(new SimpleAudioFile("file", memoryStream));
 
                 var audioFileProperties = Create(file, "audio/mp3", TagLib.ReadStyle.Average);
+                long songDuration = audioFileProperties?.Properties?.Duration.Ticks ?? 0;
+                decimal songDurationMinutes = songDuration / 600_000_000m;
                 var extension = "mp3";
+                //
 
+                if (!this._subscriptionsService.UserHasEnoughMinutesForUpload(request.UserRequestingId,
+                        songDurationMinutes))
+                {
+                    throw new TransferTooLargeException($"Your subscription doesn't support uploading files this large.");
+                }
+
+                await diskStorageService.UploadSmallFile(memoryStream, "songs/" + newSongId, request.Bucket,
+                    request.AccessKey, request.SecretKey);
+                
                 await storageInfoRepository.AddAsync(new Storage()
                 {
                     SongId = newSongId,
@@ -85,7 +98,8 @@ namespace Application.Features.Upload
                     Extension = extension
                 });
 
-                await songRepository.SetSongDuration(newSongId, audioFileProperties?.Properties?.Duration.Ticks ?? 0);
+                await _subscriptionsService.DeductUserMinutes(request.UserRequestingId, songDurationMinutes);
+                await songRepository.SetSongDuration(newSongId, songDuration);
                 await songRepository.SetSongDateAdded(newSongId, DateTimeOffset.UtcNow);
             }
 

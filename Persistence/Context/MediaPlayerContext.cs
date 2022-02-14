@@ -11,6 +11,8 @@ namespace Persistence.Context
         public DbSet<Album> Albums { get; set; }
         public DbSet<Playlist> Playlists { get; set; }
         public DbSet<Storage> StorageInfo { get; set; }
+        public DbSet<Subscription> Subscriptions { get; set; }
+        public DbSet<NewsPost> News { get; set; }
 
         public MediaPlayerContext()
         {
@@ -25,7 +27,10 @@ namespace Persistence.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<ApplicationUser>()
+                .HasOne<Subscription>(u => u.Subscription)
+                .WithOne(s => s.ApplicationUser)
+                .HasForeignKey<Subscription>(u => u.ApplicationUserId);
         }
 
         public async Task<int> SaveChangesAsync()

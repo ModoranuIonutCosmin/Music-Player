@@ -2,6 +2,7 @@
 {
     public interface IPasswordHashGenerator
     {
-        string HashPassword(string password);
+        string HashPassword(string password, string salt);
+        byte[] GenerateSalt();
     }
 }

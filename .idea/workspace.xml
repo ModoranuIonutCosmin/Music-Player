@@ -1,7 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2331139c-20da-473a-a138-1ea3f0dbda7c" name="Changes" comment="" />
+    <list default="true" id="2331139c-20da-473a-a138-1ea3f0dbda7c" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Application/Interfaces/INewsRepository.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Application/Interfaces/ISubscriptionsRepository.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Application/Interfaces/ISubscriptionsService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Application/Services/SubscriptionsService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Domain/Datamodels/SubscriptionType.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Domain/Entities/NewsPost.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Domain/Entities/Subscription.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Persistence/Migrations/20220210155908_AddedSubscriptionPlan.Designer.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Persistence/Migrations/20220210155908_AddedSubscriptionPlan.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Persistence/Migrations/20220210174223_AddedNewsPost.Designer.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Persistence/Migrations/20220210174223_AddedNewsPost.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Persistence/v1/NewsRepository.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Persistence/v1/SubscriptionsRepository.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebClient/src/app/modules/playlist/models/single-playlist-response-dto.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebClient/src/app/shared/components/header/header.component.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebClient/src/app/shared/components/header/header.component.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebClient/src/app/shared/components/header/header.component.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebClient/src/app/shared/components/header/header.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Music Player/.idea/aws.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Music Player/.idea/aws.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Application/Features/Auth/Commands/LoginUserCommandHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Application/Features/Auth/Commands/LoginUserCommandHandler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Application/Features/Auth/Commands/RegisterUserCommandHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Application/Features/Auth/Commands/RegisterUserCommandHandler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Application/Features/Upload/UploadFileCommandHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Application/Features/Upload/UploadFileCommandHandler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Application/Interfaces/IPasswordHashGenerator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Application/Interfaces/IPasswordHashGenerator.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Application/Services/PasswordHashGenerator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Application/Services/PasswordHashGenerator.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Domain/Entities/ApplicationUser.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Domain/Entities/ApplicationUser.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Persistence/Context/MediaPlayerContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Persistence/Context/MediaPlayerContext.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Persistence/Migrations/MediaPlayerContextModelSnapshot.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Persistence/Migrations/MediaPlayerContextModelSnapshot.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Persistence/PersistenceDI.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Persistence/PersistenceDI.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebAPI/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPI/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebClient/src/app/app.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/WebClient/src/app/app.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebClient/src/app/app.component.scss" beforeDir="false" afterPath="$PROJECT_DIR$/WebClient/src/app/app.component.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebClient/src/app/app.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/WebClient/src/app/app.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebClient/src/app/app.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/WebClient/src/app/app.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebClient/src/app/core/authentication/authentication.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/WebClient/src/app/core/authentication/authentication.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebClient/src/app/core/services/helpers/duration-formatter.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/WebClient/src/app/core/services/helpers/duration-formatter.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebClient/src/app/core/services/music player/music-player-controller-facade.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/WebClient/src/app/core/services/music player/music-player-controller-facade.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebClient/src/app/core/services/music player/next-song.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/WebClient/src/app/core/services/music player/next-song.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebClient/src/app/core/services/playlists/playlists.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/WebClient/src/app/core/services/playlists/playlists.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebClient/src/app/core/services/states/music-activity.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/WebClient/src/app/core/services/states/music-activity.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebClient/src/app/modules/album/album.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/WebClient/src/app/modules/album/album.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebClient/src/app/modules/album/components/album-info-panel/album-info-panel.component.scss" beforeDir="false" afterPath="$PROJECT_DIR$/WebClient/src/app/modules/album/components/album-info-panel/album-info-panel.component.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebClient/src/app/modules/album/components/song-browser/song-browser.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/WebClient/src/app/modules/album/components/song-browser/song-browser.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebClient/src/app/modules/album/components/song-browser/song-browser.component.scss" beforeDir="false" afterPath="$PROJECT_DIR$/WebClient/src/app/modules/album/components/song-browser/song-browser.component.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebClient/src/app/modules/album/pages/album-explorer/album-explorer.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/WebClient/src/app/modules/album/pages/album-explorer/album-explorer.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebClient/src/app/modules/album/pages/album-explorer/album-explorer.component.scss" beforeDir="false" afterPath="$PROJECT_DIR$/WebClient/src/app/modules/album/pages/album-explorer/album-explorer.component.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebClient/src/app/modules/auth/auth.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/WebClient/src/app/modules/auth/auth.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebClient/src/app/modules/auth/components/login/login.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/WebClient/src/app/modules/auth/components/login/login.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebClient/src/app/modules/auth/components/login/login.component.scss" beforeDir="false" afterPath="$PROJECT_DIR$/WebClient/src/app/modules/auth/components/login/login.component.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebClient/src/app/modules/auth/components/login/login.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/WebClient/src/app/modules/auth/components/login/login.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebClient/src/app/modules/auth/components/register/register.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/WebClient/src/app/modules/auth/components/register/register.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebClient/src/app/modules/auth/components/register/register.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/WebClient/src/app/modules/auth/components/register/register.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebClient/src/app/modules/search-results/pages/search-results/search-results.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/WebClient/src/app/modules/search-results/pages/search-results/search-results.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebClient/src/app/modules/search-results/pages/search-results/search-results.component.scss" beforeDir="false" afterPath="$PROJECT_DIR$/WebClient/src/app/modules/search-results/pages/search-results/search-results.component.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebClient/src/app/modules/search-results/pages/search-results/search-results.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/WebClient/src/app/modules/search-results/pages/search-results/search-results.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebClient/src/app/modules/upload/pages/album-upload/album-upload.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/WebClient/src/app/modules/upload/pages/album-upload/album-upload.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebClient/src/app/modules/upload/pages/album-upload/album-upload.component.scss" beforeDir="false" afterPath="$PROJECT_DIR$/WebClient/src/app/modules/upload/pages/album-upload/album-upload.component.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebClient/src/app/modules/upload/pages/album-upload/album-upload.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/WebClient/src/app/modules/upload/pages/album-upload/album-upload.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebClient/src/app/modules/upload/upload.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/WebClient/src/app/modules/upload/upload.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebClient/src/app/shared/components/playlists-popup/playlists-popup.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/WebClient/src/app/shared/components/playlists-popup/playlists-popup.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebClient/src/app/shared/components/playlists-popup/playlists-popup.component.scss" beforeDir="false" afterPath="$PROJECT_DIR$/WebClient/src/app/shared/components/playlists-popup/playlists-popup.component.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebClient/src/app/shared/components/playlists-popup/playlists-popup.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/WebClient/src/app/shared/components/playlists-popup/playlists-popup.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebClient/src/app/shared/components/searchbar/searchbar.component.scss" beforeDir="false" afterPath="$PROJECT_DIR$/WebClient/src/app/shared/components/searchbar/searchbar.component.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebClient/src/app/shared/components/searchbar/searchbar.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/WebClient/src/app/shared/components/searchbar/searchbar.component.ts" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -11,6 +75,7 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="24qRaJJ6e4VXnSBQNOLZfNtStM0" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -30,6 +95,7 @@
       <option name="presentableId" value="Default" />
       <updated>1644356196461</updated>
       <workItem from="1644356197952" duration="21000" />
+      <workItem from="1644775190294" duration="12000" />
     </task>
     <servers />
   </component>

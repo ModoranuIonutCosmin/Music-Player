@@ -1,9 +1,9 @@
 import {SongInfo} from "../../modules/album/models/song-info";
 
 export interface MusicActivityModel {
-  songId?: string
-  albumId?: string,
-  playListId?: string,
+  sourceType?: string,
+  sourceId?: string,
+  songId?: string,
   isShuffled?: boolean,
   trackPosition?: number,
   songInfo?: SongInfo,

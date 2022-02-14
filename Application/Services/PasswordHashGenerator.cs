@@ -1,4 +1,5 @@
-﻿using Application.Interfaces;
+﻿using System.Security.Cryptography;
+using Application.Interfaces;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using System.Text;
 
@@ -6,21 +7,27 @@ namespace Application.Services
 {
     public class PasswordHashGenerator : IPasswordHashGenerator
     {
-        public string HashPassword(string password)
+        public const int SaltByteLength = 32;
+        public string HashPassword(string password, string salt)
         {
-            // generate a 128-bit salt using a cryptographically strong random sequence of nonzero values
-            byte[] salt = Encoding.ASCII.GetBytes("n3xts@lt");
-
-            Console.WriteLine($"Salt: {Convert.ToBase64String(salt)}");
-
-            // derive a 256-bit subkey (use HMACSHA256 with 100,000 iterations)
+            byte[] saltBytes = Encoding.ASCII.GetBytes("salt");
 
             return Convert.ToBase64String(KeyDerivation.Pbkdf2(
                 password: password,
-                salt: salt,
+                salt: saltBytes,
                 prf: KeyDerivationPrf.HMACSHA256,
                 iterationCount: 1000,
                 numBytesRequested: 256 / 8));
+        }
+
+        public byte[] GenerateSalt()
+        {
+            RNGCryptoServiceProvider rncCsp = new();
+            
+            byte[] salt = new byte[SaltByteLength];
+            rncCsp.GetBytes(salt);
+
+            return salt;
         }
     }
 }

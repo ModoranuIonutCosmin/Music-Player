@@ -3,6 +3,8 @@ import {SongInfo} from "../../models/song-info";
 import {PlaylistsPopupComponent} from "../../../../shared/components/playlists-popup/playlists-popup.component";
 import {MatDialog} from "@angular/material/dialog";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {NbGlobalPhysicalPosition} from "@nebular/theme";
+import {ToastrHelpersService} from "../../../../core/services/helpers/toastr-helpers.service";
 
 @Component({
   selector: 'app-song-browser',
@@ -10,36 +12,30 @@ import {MatSnackBar} from "@angular/material/snack-bar";
   styleUrls: ['./song-browser.component.scss']
 })
 
-export class SongBrowserComponent implements OnInit {
+export class SongBrowserComponent {
   displayedColumns: string[] = ['coverImg', 'position', 'name', 'length', 'controls'];
   @Input() dataSource: SongInfo[];
   @Output() songPlayClicked: EventEmitter<SongInfo> = new EventEmitter<SongInfo>();
   highlightedElementIndex: number = -1;
 
 
+  constructor(public dialog: MatDialog,
+              private toastrService: ToastrHelpersService) {
+    this.dataSource = []
+  }
 
-  openDialog(songId: string,) {
+  openDialog(songId: string) {
     const dialogRef = this.dialog.open(PlaylistsPopupComponent, {
       data: {songId: songId}
     });
 
     dialogRef.afterClosed().subscribe((result: any) => {
       if (result == 1) {
-        this.snackBar.open("Song added to playlist");
+        this.toastrService.showMessage(NbGlobalPhysicalPosition.BOTTOM_RIGHT, 'success', 'Song was added to playlist succesfully');
       } else {
-        this.snackBar.open("Couldn't add song to playlist");
+        this.toastrService.showMessage(NbGlobalPhysicalPosition.BOTTOM_RIGHT, 'danger', 'Couldnt add song to playlist' );
       }
     });
-  }
-
-
-  constructor(public dialog: MatDialog,
-              public snackBar: MatSnackBar) {
-    this.dataSource = []
-  }
-
-  ngOnInit(): void {
-
   }
 
   songPlayed(songInfo: SongInfo) {

@@ -8,19 +8,19 @@ namespace Application.Features.Metadata;
 
 public class CreateNewAlbumCommandHandler : IRequestHandler<CreateNewAlbumCommand, AlbumResponseDTO>
 {
-    private readonly IMapper mapper;
-    private readonly IAlbumRepository albumRepository;
+    private readonly IMapper _mapper;
+    private readonly IAlbumRepository _albumRepository;
 
     public CreateNewAlbumCommandHandler(IMapper mapper, IAlbumRepository albumRepository)
     {
-        this.mapper = mapper;
-        this.albumRepository = albumRepository;
+        this._mapper = mapper;
+        this._albumRepository = albumRepository;
     }
     public async Task<AlbumResponseDTO> Handle(CreateNewAlbumCommand request, CancellationToken cancellationToken)
     {
         var albumModel = request.AlbumModel;
 
-        Album newAlbum = mapper.Map<AlbumModel, Album>(albumModel);
+        Album newAlbum = _mapper.Map<AlbumModel, Album>(albumModel);
 
         newAlbum.DateAdded = DateTimeOffset.UtcNow;
 
@@ -30,16 +30,17 @@ public class CreateNewAlbumCommandHandler : IRequestHandler<CreateNewAlbumComman
 
         foreach (SongModel songModel in albumModel.Songs)
         {
-            List<Artist> songArtists = mapper.Map<List<ArtistModel>, List<Artist>>(songModel.Artists);
+            List<Artist> songArtists = _mapper.Map<List<ArtistModel>, List<Artist>>(songModel.Artists);
 
             allAlbumArtists.UnionWith(songArtists);
         }
+        
         newAlbum.Owner = request.Owner;
         newAlbum.Artists = new List<Artist>(allAlbumArtists);
 
-        Album resultingAlbum = await albumRepository.AddAsync(newAlbum);
+        Album resultingAlbum = await _albumRepository.AddAsync(newAlbum);
 
-        var result = mapper.Map<Album, AlbumResponseDTO>(resultingAlbum);
+        var result = _mapper.Map<Album, AlbumResponseDTO>(resultingAlbum);
 
         return result;
     }
