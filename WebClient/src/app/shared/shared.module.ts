@@ -26,6 +26,7 @@ import {MatTab} from "@angular/material/tabs";
 import {MatTableModule} from "@angular/material/table";
 import {MatButtonModule} from "@angular/material/button";
 import {MatMenuModule} from "@angular/material/menu";
+import {DirectivesModule} from "../modules/directives/directives.module";
 
 
 @NgModule({
@@ -36,31 +37,33 @@ import {MatMenuModule} from "@angular/material/menu";
     PlaylistsPopupComponent,
     HeaderComponent,
    SongBrowserComponent],
-  imports: [
-    CommonModule,
-    NbSidebarModule.forRoot(),
-    NbLayoutModule,
-    NbEvaIconsModule,
-    NbIconModule,
-    NbSidebarModule,
-    NbSearchModule,
+    imports: [
+        CommonModule,
+        NbSidebarModule.forRoot(),
+        NbLayoutModule,
+        NbEvaIconsModule,
+        NbIconModule,
+        NbSidebarModule,
+        NbSearchModule,
 
-    NbContextMenuModule,
-    NbMenuModule.forRoot(),
-    NbInputModule,
-    NbButtonModule,
-    NbProgressBarModule,
-    NbUserModule,
-    NbToastrModule,
-    NbToastrModule.forRoot(),
+        NbContextMenuModule,
+        NbMenuModule.forRoot(),
+        NbInputModule,
+        NbButtonModule,
+        NbProgressBarModule,
+        NbUserModule,
+        NbToastrModule,
+        NbToastrModule.forRoot(),
 
-    RouterModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatDialogModule,
-    MatTableModule,
-    MatMenuModule
-  ],
+        RouterModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatDialogModule,
+        MatTableModule,
+        MatMenuModule,
+        DirectivesModule,
+        MatButtonModule
+    ],
   exports: [
     LengthFormatPipe,
     PlayerComponent,

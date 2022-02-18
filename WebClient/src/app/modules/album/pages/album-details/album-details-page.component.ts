@@ -4,8 +4,6 @@ import {ActivatedRoute} from "@angular/router";
 import {flatMap, mergeMap} from "rxjs/operators";
 import {AlbumService} from "../../../../core/services/media/album/album.service";
 import {AlbumInfo} from "../../models/album-info";
-import {MusicActivityService} from "../../../../core/services/states/music-activity.service";
-import {AudioService} from "../../../../core/services/music player/audio.service";
 import {DurationFormatterService} from "../../../../core/services/helpers/duration-formatter.service";
 import {
   MusicPlayerControllerFacadeService
@@ -15,6 +13,7 @@ import {MatDialog} from "@angular/material/dialog";
 import {ToastrHelpersService} from "../../../../core/services/helpers/toastr-helpers.service";
 import {NbGlobalPhysicalPosition} from "@nebular/theme";
 import {SpinnerService} from "../../../../core/services/helpers/spinner.service";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-album-details',
@@ -24,9 +23,10 @@ import {SpinnerService} from "../../../../core/services/helpers/spinner.service"
 export class AlbumDetailsPage implements OnInit {
   albumData!: AlbumInfo;
 
-  songsData: SongInfo[] =
-    [];
+  songsData: SongInfo[] = [];
   albumId!: string
+
+  isLoading$: Observable<boolean>
 
 
   constructor(private route: ActivatedRoute,
@@ -38,9 +38,11 @@ export class AlbumDetailsPage implements OnInit {
               private spinnerService: SpinnerService,
               private dialog: MatDialog
               ) {
+    this.isLoading$ = spinnerService.isLoading$;
   }
 
   ngOnInit(): void {
+
     this.spinnerService.isLoading$.next(true);
     this.route.params.pipe(mergeMap((v, index) => {
       this.albumId = v['albumId'];
@@ -59,7 +61,6 @@ export class AlbumDetailsPage implements OnInit {
       });
       this.spinnerService.isLoading$.next(false);
     }, err => {
-      this.spinnerService.isLoading$.next(false);
     });
   }
 

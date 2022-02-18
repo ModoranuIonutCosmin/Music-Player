@@ -18,6 +18,7 @@ export class YourPlaylistsComponent implements OnInit {
     this.playlistSerice.loadMyPlaylists()
       .subscribe(result => {
         this.dataSource = result.playlists;
+        this.dataSource.forEach(p => p.coverImageUrl = p.songs[0].coverImageUrl);
       })
   }
 

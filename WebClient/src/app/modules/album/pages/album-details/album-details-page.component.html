@@ -1,5 +1,5 @@
 
-<main class="wrapper">
+<main class="wrapper" *ngIf="!(this.isLoading$ | async)">
   <div class="container">
     <app-album-info-panel [dataSource]="albumData"></app-album-info-panel>
     <app-song-browser [dataSource]="songsData"

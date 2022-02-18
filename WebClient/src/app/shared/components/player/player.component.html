@@ -31,10 +31,10 @@
     </div>
 
     <div class="player__trackInfo">
-        <img class= "smallPlayerAvatar" [src]="this.songInfo.coverImageUrl"/>
+        <img class= "smallPlayerAvatar" [src]="this.songInfo.coverImageUrl" appImageFallback="assets/images/PlaylistPlaceholder1.png"/>
         <div>
           <h1 class = "player__trackName"> {{this.songInfo.name}}</h1>
-          <p *ngFor="let artist of this.songInfo.artists | slice:0:3">{{artist.artistName}} . </p>
+          <span *ngFor="let artist of this.songInfo.artists | slice:0:3">{{artist.artistName}} . </span>
         </div>
     </div>
   </div>

@@ -35,6 +35,9 @@ public class QueryAlbumsPaginatedCommandHandler : IRequestHandler<QueryAlbumsPag
                 break;
         }
 
+        albumOnThisPage = albumOnThisPage
+            .Where(a => a.Songs.Any(s => s.Length > 0))
+            .ToList();
 
         return new AlbumsListResponseDTO()
         {

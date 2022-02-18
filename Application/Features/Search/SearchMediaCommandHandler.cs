@@ -24,12 +24,14 @@ namespace Domain.Models
         {
             var songResults = (await songRepository
                 .GetSongByNameSimilarity(request.Query, request.Count, request.Page))
+                .Where(s => s.Length > 0)
                 .ToList();
 
             var albumResults = (await albumRepository
                 .GetAlbumsByNameSimilarity(request.Query, request.Count, request.Page))
+                .Where(a => a.Songs.Any(s => s.Length > 0))
                 .ToList();
-
+            
             return new()
             {
                 Query = request.Query,

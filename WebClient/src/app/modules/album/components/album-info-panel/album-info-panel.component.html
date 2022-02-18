@@ -2,7 +2,7 @@
   <section>
     <div class="mainContent">
       <div class = "cover">
-        <img [src] = "dataSource.coverImageUrl || '../../../../../assets/images/songIcon.png'" alt = "album photo"/>
+        <img [src] = "dataSource.coverImageUrl || ''" appImageFallback="assets/images/PlaylistPlaceholder1.png" alt = "album photo"/>
       </div>
       <div class = "infoPanel">
         <header>

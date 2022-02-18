@@ -4,6 +4,7 @@ import {AuthenticationService} from "./core/authentication/authentication.servic
 import {BehaviorSubject} from "rxjs";
 import {HeaderService} from "./core/header/header.service";
 import {SpinnerService} from "./core/services/helpers/spinner.service";
+import {AlertsService} from "./core/services/alerts/alerts.service";
 
 @Component({
   selector: 'app-root',
@@ -11,11 +12,13 @@ import {SpinnerService} from "./core/services/helpers/spinner.service";
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'MusicPlayer';
+  title = 'Music player';
 
   isLoading$: BehaviorSubject<boolean>;
-
-  constructor(private spinnerService: SpinnerService) {
+  serverDown$: BehaviorSubject<boolean>;
+  constructor(private spinnerService: SpinnerService,
+              private alertsService: AlertsService) {
     this.isLoading$ = spinnerService.isLoading$;
+    this.serverDown$ = alertsService.serverDown$;
   }
 }

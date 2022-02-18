@@ -13,7 +13,7 @@ export class PlaylistsPopupComponent implements OnInit {
   @Input() dataSource: PlaylistsResponseDTO = {playlists: []};
   filteredPlaylists: PlaylistInfo[] = []
   readOnly: boolean = true;
-  enteredName: string = "Add a new playlist.";
+  enteredName: string = "";
   songId: string = "";
   filterText: string = "";
 
@@ -24,10 +24,15 @@ export class PlaylistsPopupComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.playlistService.loadMyPlaylists().subscribe(result => {
-      this.dataSource = result;
-      this.filteredPlaylists = this.dataSource.playlists;
-    })
+
+    this.playlistService.loadMyPlaylists()
+      .subscribe(result => {
+        this.dataSource = result;
+
+        this.filteredPlaylists = this.dataSource.playlists;
+
+        console.log(this.filteredPlaylists);
+      })
   }
 
   addNewPlaylist() {
@@ -35,7 +40,7 @@ export class PlaylistsPopupComponent implements OnInit {
   }
 
   resetFromEdit() {
-    this.enteredName = "Add a new playlist.";
+    this.enteredName = "";
   }
 
   finishEditing() {
@@ -48,7 +53,7 @@ export class PlaylistsPopupComponent implements OnInit {
           songs: []
         }
         this.dataSource.playlists.push(playlistInfo);
-        this.filteredPlaylists.push(playlistInfo)
+        this.filteredPlaylists.unshift(playlistInfo)
         this.resetFromEdit();
       })
   }
@@ -57,11 +62,11 @@ export class PlaylistsPopupComponent implements OnInit {
     console.log(playlistId)
     this.playlistService.addSongToPlaylist(playlistId, this.songId)
       .subscribe(result => {
-        this.dialogRef.close(1)
-      },
-      error => {
-        this.dialogRef.close(0);
-      })
+          this.dialogRef.close(1)
+        },
+        error => {
+          this.dialogRef.close(0);
+        })
   }
 
   filterPlaylists() {

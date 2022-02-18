@@ -8,6 +8,7 @@ import {AlbumService} from "../../core/services/media/album/album.service";
 import {NbButtonModule, NbIconModule} from "@nebular/theme";
 import {SharedModule} from "../../shared/shared.module";
 import {FavoritesService} from "../../core/services/favorites/favorites.service";
+import {DirectivesModule} from "../directives/directives.module";
 
 
 @NgModule({
@@ -15,13 +16,14 @@ import {FavoritesService} from "../../core/services/favorites/favorites.service"
         AlbumDetailsPage,
         AlbumInfoPanelComponent
     ],
-  imports: [
-    CommonModule,
-    AlbumRoutingModule,
-    NbIconModule,
-    NbButtonModule,
-    SharedModule
-  ],
+    imports: [
+        CommonModule,
+        AlbumRoutingModule,
+        NbIconModule,
+        NbButtonModule,
+        SharedModule,
+        DirectivesModule
+    ],
     providers: [AlbumService, FavoritesService]
 })
 export class AlbumModule { }

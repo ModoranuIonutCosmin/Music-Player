@@ -40,7 +40,7 @@ public class SubscriptionsService : ISubscriptionsService
             return false;
         }
 
-        var subscriptionType = userSubscription.ExpiryDate < DateTimeOffset.UtcNow
+        var subscriptionType = userSubscription.ExpiryDate >= DateTimeOffset.UtcNow
             ? userSubscription.Type
             : SubscriptionType.FREE;
         
