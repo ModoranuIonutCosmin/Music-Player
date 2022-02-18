@@ -15,6 +15,7 @@ import {
   NbProgressBarModule,
   NbStepperModule
 } from "@nebular/theme";
+import {UsersService} from "../../core/services/users/users.service";
 
 
 @NgModule({
@@ -35,6 +36,6 @@ import {
     NbAccordionModule,
     NbProgressBarModule,
   ],
-  providers: [UploadService]
+  providers: [UploadService, UsersService]
 })
 export class UploadModule { }

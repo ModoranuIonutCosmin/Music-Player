@@ -1,7 +1,7 @@
 <main #fullHeader>
   <img class="siteLogo"
        id = "hamburger"
-       src="https://www.pinclipart.com/picdir/middle/520-5202829_winamp-logo-png-clipart.png"/>
+       src="assets/images/logo.png"/>
   <button nbButton status="primary" class="hamburgerMenu" (click) = toggleOverlay()>
     <nb-icon icon="menu-outline"></nb-icon>
   </button>
@@ -13,14 +13,14 @@
         </li>
         <li>
           <a [nbContextMenu]="this.exploreItems" [nbContextMenuPlacement]="contextMenuOpenDirection"
-             [nbContextMenuTrigger]="contextMenuOpenTrigger">
+             [nbContextMenuTrigger]="contextMenuOpenTrigger" nbContextMenuTag="explore-menu" >
             Explore
           </a>
           <nb-icon icon="chevron-down-outline"></nb-icon>
         </li>
         <li>
           <a [nbContextMenu]="this.libraryItems" [nbContextMenuPlacement]="contextMenuOpenDirection"
-             [nbContextMenuTrigger]="contextMenuOpenTrigger">Library</a>
+             [nbContextMenuTrigger]="contextMenuOpenTrigger" nbContextMenuTag="library-menu">Library</a>
           <nb-icon icon="chevron-down-outline"></nb-icon>
         </li>
 

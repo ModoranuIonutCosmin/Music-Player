@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {AlbumInfo} from "../../../album/models/album-info";
 import {FilterOptionsModel} from "../../models/filter-options-model";
 import {AlbumService} from "../../../../core/services/media/album/album.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-album-details',
@@ -21,18 +22,18 @@ export class AlbumExplorerComponent implements OnInit {
     sortOrder: 'desc'
   }
 
-  constructor(private albumsService: AlbumService) { }
+  constructor(private albumsService: AlbumService,
+              private router: Router) { }
 
   ngOnInit(): void {
     this.loadFirstPage();
   }
   loadFirstPage(): void {
     this.albumsService
-      .getAlbumsListPaginated(this.page, this.count, this.filterOptions.selectedSortCriteria,
+      .getAlbumsListPaginated(this.page++, this.count, this.filterOptions.selectedSortCriteria,
         this.filterOptions.sortOrder)
       .subscribe(result => {
         this.albums = result.albums;
-        this.page++;
         this.totalLoaded += this.count;
         this.totalAlbumsCount = result.totalAlbumsCount;
       });
@@ -44,11 +45,10 @@ export class AlbumExplorerComponent implements OnInit {
     }
 
     this.albumsService
-      .getAlbumsListPaginated(this.page, this.count, this.filterOptions.selectedSortCriteria,
+      .getAlbumsListPaginated(++this.page, this.count, this.filterOptions.selectedSortCriteria,
         this.filterOptions.sortOrder)
       .subscribe(result => {
         this.albums.push(...result.albums)
-        this.page++;
         this.totalLoaded += this.count;
       });
   }
@@ -59,5 +59,9 @@ export class AlbumExplorerComponent implements OnInit {
     this.totalLoaded = 0;
     this.filterOptions = filterOptions;
     this.loadFirstPage();
+  }
+
+  navigateToAlbum(album: AlbumInfo) {
+    this.router.navigate(['/album', album.id]);
   }
 }

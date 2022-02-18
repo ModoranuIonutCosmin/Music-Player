@@ -26,7 +26,7 @@ import {Router} from "@angular/router";
 })
 export class HeaderComponent implements OnInit, AfterViewInit{
   exploreItems = [{title: 'Latest albums'}, {title: 'Popular'}];
-  libraryItems = [{title: 'Favorite songs'}, {title: 'My playlists'}];
+  libraryItems = [{title: 'My playlists'}];
   usersControlsItems = [ {title: 'Profile'}, {title: 'Log out'} ];
 
   contextMenuOpenDirection: NbPosition = NbPosition.BOTTOM;
@@ -66,6 +66,30 @@ export class HeaderComponent implements OnInit, AfterViewInit{
         if (this.usersControlsItems[0].title === title) {
           this.router.navigate(['/profile'])
         }
+      });
+
+    this.nbMenuService.onItemClick()
+      .pipe(
+        filter(({ tag }) => tag === 'explore-menu'),
+        map(({ item: { title } }) => title),
+      )
+      .subscribe(title => {
+        if (this.exploreItems[0].title === title) {
+          this.router.navigate(['/explorer'], {queryParams: {cr: 'dateAdded', so:'desc'}})
+        }
+
+        if (this.exploreItems[1].title === title) {
+          this.router.navigate(['/explorer'], {queryParams: {cr: 'popular', so:'desc'}})
+        }
+      });
+
+    this.nbMenuService.onItemClick()
+      .pipe(
+        filter(({ tag }) => tag === 'library-menu'),
+        map(({ item: { title } }) => title),
+      )
+      .subscribe(title => {
+          this.router.navigate(['/playlist'])
       });
   }
   ngAfterViewInit(): void {

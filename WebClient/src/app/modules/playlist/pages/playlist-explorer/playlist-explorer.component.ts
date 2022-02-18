@@ -53,7 +53,7 @@ export class PlaylistExplorerComponent implements OnInit {
     this.playlistService.deleteSongFromPlaylist(this.playlistId, songInfo.id || '')
       .subscribe(result => {
         this.dataSource = this.dataSource.filter(song => song.id != (songInfo.id || ''));
-          this.toastrService.showMessage(NbGlobalPhysicalPosition.BOTTOM_RIGHT, 'success', 'Song was removed from the playlist succesfully');
+        this.toastrService.showMessage(NbGlobalPhysicalPosition.BOTTOM_RIGHT, 'success', 'Song was removed from the playlist succesfully');
       },
         err=> {
           this.toastrService.showMessage(NbGlobalPhysicalPosition.BOTTOM_RIGHT, 'danger', 'Couldnt remove from playlist!' );

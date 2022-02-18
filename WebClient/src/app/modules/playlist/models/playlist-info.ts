@@ -4,5 +4,6 @@ export interface PlaylistInfo {
   id: string,
   name: string,
   songs: SongInfo[],
-  visibility: number
+  visibility: number,
+  coverImageUrl?: string
 }

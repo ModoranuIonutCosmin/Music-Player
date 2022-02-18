@@ -25,62 +25,78 @@ import {MusicPlayerControllerFacadeService} from "./core/services/music player/m
 import {PlaylistsPopupComponent} from './shared/components/playlists-popup/playlists-popup.component';
 import {PlaylistsService} from "./core/services/playlists/playlists.service";
 import {
-    NbThemeModule,
-    NbLayoutModule,
-    NbSidebarModule,
-    NbSearchModule,
-    NbIconModule,
-    NbContextMenuModule, NbMenuModule, NbInputModule, NbButtonModule, NbProgressBarModule, NbUserModule, NbSpinnerModule
+  NbThemeModule,
+  NbLayoutModule,
+  NbSidebarModule,
+  NbSearchModule,
+  NbIconModule,
+  NbContextMenuModule,
+  NbMenuModule,
+  NbInputModule,
+  NbButtonModule,
+  NbProgressBarModule,
+  NbUserModule,
+  NbSpinnerModule,
+  NbAlertModule
 } from '@nebular/theme';
 import {NbEvaIconsModule} from '@nebular/eva-icons';
-import {SearchService} from "./core/services/search/search.service";
-import {HeaderService} from "./core/header/header.service";
 import {NextSongService} from "./core/services/music player/next-song.service";
-import {AlbumService} from "./core/services/media/album/album.service";
 import {SharedModule} from "./shared/shared.module";
 import {SpinnerService} from "./core/services/helpers/spinner.service";
-import { ImageFallbackDirective } from './core/directives/image-fallback.directive';
+import {ErrorInterceptor} from "./core/interceptors/error.interceptor";
+import {AlertsService} from "./core/services/alerts/alerts.service";
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
+
 
 @NgModule({
   declarations: [
     AppComponent,
   ],
-    imports: [
-        BrowserModule,
-        AppRoutingModule,
-        HttpClientModule,
-        BrowserAnimationsModule,
-        LayoutModule,
-        MatToolbarModule,
-        MatButtonModule,
-        MatSidenavModule,
-        MatIconModule,
-        MatListModule,
-        MaterialModule,
-        FormsModule,
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    HttpClientModule,
+    BrowserAnimationsModule,
+    LayoutModule,
+    MatToolbarModule,
+    MatButtonModule,
+    MatSidenavModule,
+    MatIconModule,
+    MatListModule,
+    MaterialModule,
+    FormsModule,
 
-        NbThemeModule.forRoot({name: 'dark'}),
-        NbSidebarModule.forRoot(),
-        NbLayoutModule,
-        NbEvaIconsModule,
-        NbIconModule,
-        NbSidebarModule,
-        NbSearchModule,
+    NbThemeModule.forRoot({name: 'dark'}),
+    NbSidebarModule.forRoot(),
+    NbLayoutModule,
+    NbEvaIconsModule,
+    NbIconModule,
+    NbSidebarModule,
+    NbSearchModule,
 
-        NbContextMenuModule,
-        NbMenuModule.forRoot(),
-        NbInputModule,
-        NbButtonModule,
-        NbProgressBarModule,
-        NbUserModule,
-        SharedModule,
-        NbSpinnerModule
-    ],
-  providers: [{
-    provide: HTTP_INTERCEPTORS,
-    useClass: AuthInterceptor,
-    multi: true
-  },
+    NbContextMenuModule,
+    NbMenuModule.forRoot(),
+    NbInputModule,
+    NbButtonModule,
+    NbProgressBarModule,
+    NbUserModule,
+    SharedModule,
+    NbSpinnerModule,
+    NbAlertModule,
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: environment.production,
+      // Register the ServiceWorker as soon as the app is stable
+      // or after 30 seconds (whichever comes first).
+      registrationStrategy: 'registerWhenStable:30000'
+    })
+  ],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: UnauthorizedInterceptor,
@@ -92,7 +108,8 @@ import { ImageFallbackDirective } from './core/directives/image-fallback.directi
     MusicActivityService,
     MediaService,
     NextSongService,
-    SpinnerService
+    SpinnerService,
+    AlertsService
   ],
   bootstrap: [AppComponent],
 })

@@ -1,9 +1,15 @@
 import {Component, OnInit} from '@angular/core';
-import {AbstractControl, Form, FormArray, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {UploadService} from "../../../../core/services/upload/upload.service";
 import {FileUploadInfo} from "../../models/file-upload-info";
 import {HttpEventType, HttpResponse} from "@angular/common/http";
 import {Router} from "@angular/router";
+import {UsersService} from "../../../../core/services/users/users.service";
+import {SpinnerService} from "../../../../core/services/helpers/spinner.service";
+import {BehaviorSubject} from "rxjs";
+import {UserModel} from "../../../profile/models/user-model";
+import {ToastrHelpersService} from "../../../../core/services/helpers/toastr-helpers.service";
+import {NbGlobalPhysicalPosition} from "@nebular/theme";
 
 @Component({
   selector: 'app-album-upload',
@@ -19,22 +25,44 @@ export class AlbumUploadComponent implements OnInit {
 
   successful: boolean = true;
 
+  userModel!: UserModel;
+
   stepperIndex: number = 0;
+
+  uploadButtonBusy: boolean = false;
+  uploadSuccessful: boolean = true;
 
   albumInfo: FormGroup = this.fb.group({
     name: ['', Validators.required],
     coverImageUrl: [''],
     description: [''],
-    releaseDate: ['', Validators.requiredTrue],
+    releaseDate: ['', Validators.required],
     songs: this.fb.array([])
   })
 
+  isLoading$: BehaviorSubject<boolean>;
+
   constructor(private fb: FormBuilder,
               private uploadService: UploadService,
+              private userService: UsersService,
+
+              private spinnerService: SpinnerService,
+              private toastrService: ToastrHelpersService,
+
               private router: Router) {
+    this.isLoading$ = spinnerService.isLoading$;
+    this.isLoading$.next(true);
   }
 
   ngOnInit(): void {
+    this.userService
+      .getUserBasicInfo()
+      .subscribe(res => {
+        this.userModel = res;
+        this.isLoading$.next(false);
+      }, err=> {
+        this.isLoading$.next(false);
+      })
   }
 
   navigateToEditMetadata() {
@@ -140,6 +168,16 @@ export class AlbumUploadComponent implements OnInit {
   initFileUpload(): void {
     let albumPayload: any = this.albumInfo.value;
 
+    console.log(this.albumInfo);
+    if (!this.albumInfo.valid) {
+      this.toastrService.showMessage(NbGlobalPhysicalPosition.BOTTOM_RIGHT, 'primary',
+        'Please fill in all fields before proceeding on!');
+      return;
+    }
+    this.uploadButtonBusy = true;
+    this.toastrService.showMessage(NbGlobalPhysicalPosition.BOTTOM_RIGHT, 'basic',
+      'Upload started. You can track the progress by scrolling up.');
+
     albumPayload.songs.forEach((song: any, index: number) => song.position = index + 1);
 
     albumPayload.releaseDate = new Date(albumPayload.releaseDate).toJSON()
@@ -179,13 +217,13 @@ export class AlbumUploadComponent implements OnInit {
             console.log('File is completely loaded!');
             this.currentFile++;
             this.uploadNextFile()
-
           }
         },
         (err) => {
           this.successful = false;
           console.log("Upload Error:", err);
           this.songFiles[this.currentFile].failed = true;
+          this.uploadSuccessful = false;
         }, () => {
           console.log("Upload done");
         })
@@ -197,6 +235,14 @@ export class AlbumUploadComponent implements OnInit {
 
   artistInputPlaceholder(artistIndex: number): string {
     return `Artist ${artistIndex + 1} name`
+  }
+
+  private showErrorToaster() {
+    for (let control in this.albumInfo.controls) {
+      this.toastrService.showMessage(NbGlobalPhysicalPosition.BOTTOM_RIGHT,
+        'primary',
+        JSON.stringify(this.albumInfo.controls[control].errors))
+    }
   }
 }
 

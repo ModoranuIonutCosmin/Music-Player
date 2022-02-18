@@ -27,7 +27,7 @@ export class UnauthorizedInterceptor implements HttpInterceptor {
         if (err.status === 401) {
           // redirect to the login route
           // or show a modal
-          console.log("You are unauthorized!")
+          console.log('unauthorized');
           this.auth.logout()
           this.router.navigate(['auth/login'])
         }

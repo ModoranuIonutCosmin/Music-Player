@@ -25,8 +25,10 @@ export class AlbumFilterOptionsComponent implements OnInit {
             this.selectedSortCriteria = params['cr'];
           }
           if (params['so'] && (params['so'] == 'asc' || params['so'] == 'desc')) {
-            this.selectedSortCriteria = params['so'];
+            this.sortOrder = params['so'];
           }
+
+          this.optionsChanged();
         });
   }
 

@@ -9,8 +9,12 @@
       [infiniteScrollDistance]="distance"
       [infiniteScrollThrottle]="throttle"
       (scrolled)="onScroll()" class="albumsContainer">
-      <div *ngFor="let album of albums; let i = index" class = "album">
-        <img src="{{album.coverImageUrl}}" appImageFallback="https://via.placeholder.com/200"/>
+
+      <div *ngFor="let album of albums; let i = index"
+           class = "album"
+           (click)="navigateToAlbum(album)"
+      >
+        <img src="{{album.coverImageUrl}}" appImageFallback="assets/images/PlaylistPlaceholder1.png"/>
         <p>{{album.name}}</p>
       </div>
     </div>

@@ -1,3 +1,5 @@
+@use '../../../../../themes' as *;
+
 .divider{
   border: 0.1px solid white;
 }
@@ -12,7 +14,17 @@
   text-align: center;
 }
 .album{
-  margin: 10px;
+  padding: 10px;
   display: flex;
   flex-direction: column;
+  cursor: pointer;
+
+  &:hover{
+    background-color: nb-theme(color-basic-700);
+  }
+
+  img{
+    width: 200px;
+    height: 200px;
+  }
 }

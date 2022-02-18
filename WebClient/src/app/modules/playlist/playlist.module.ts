@@ -8,6 +8,8 @@ import {AlbumModule} from "../album/album.module";
 import {MaterialModule} from "../material/material.module";
 import {PlaylistsService} from "../../core/services/playlists/playlists.service";
 import {SharedModule} from "../../shared/shared.module";
+import {NbCardModule} from "@nebular/theme";
+import {DirectivesModule} from "../directives/directives.module";
 
 
 @NgModule({
@@ -15,13 +17,16 @@ import {SharedModule} from "../../shared/shared.module";
     YourPlaylistsComponent,
     PlaylistExplorerComponent
   ],
-    imports: [
-        CommonModule,
-        PlaylistRoutingModule,
-        AlbumModule,
-        MaterialModule,
-        SharedModule
-    ],
+  imports: [
+    CommonModule,
+    PlaylistRoutingModule,
+    AlbumModule,
+    MaterialModule,
+    SharedModule,
+    NbCardModule,
+    DirectivesModule,
+
+  ],
   providers: [
     PlaylistsService
   ]

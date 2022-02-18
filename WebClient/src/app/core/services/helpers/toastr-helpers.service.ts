@@ -10,6 +10,6 @@ export class ToastrHelpersService {
 
 
   showMessage(position: NbGlobalPhysicalPosition, status: string, message: string) {
-    this.toastrService.show(status || 'Success', `${message}`, { position, status });
+    this.toastrService.show(status || 'Success', `${message}`, { position, status, duration: 3000 });
   }
 }

@@ -1,13 +1,14 @@
-<main>
+<main *ngIf="!(isLoading$ | async)">
   <nb-stepper linear="true" disableStepNavigation [selectedIndex]="stepperIndex">
 
     <nb-step label="Select files">
       <header>
         <h1>We're happy to upload your album</h1>
         <p>
-          Browse for the audio files by clicking the [] button or by dragging
+          Browse for the audio files by clicking the browse button or by dragging
           and dropping them onto the rectangle bellow.
         </p>
+        <p>You have <strong>{{this.userModel.subscription.uploadMinutesMax - this.userModel.subscription.uploadMinutesUsed}}</strong> upload minutes left.</p>
       </header>
 
       <div class="dropzone" appDragAndDrop (filesDropped)="newFilesDropped($event)">
@@ -50,15 +51,14 @@
 
         <button nbButton status="basic"
                 class="proceedButton" aria-label="Procced to next step"
-                (click)="navigateToEditMetadata()">
+                (click)="navigateToEditMetadata()"
+        [disabled]="!(this.songFiles.length)">
           Proceed
         </button>
       </section>
     </nb-step>
 
     <nb-step label="Edit metadada">
-
-
       <form [formGroup]="this.albumInfo">
         <header>
           <h2>Album metadata</h2>
@@ -82,7 +82,7 @@
             <div class="inputGroup">
               <label for="releaseDate">Release date:</label>
               <input nbInput status="basic" id="releaseDate" type="date" formControlName="releaseDate"
-                     value="10/10/2000"
+                     value="2000-10-10"
               />
             </div>
           </div>
@@ -159,7 +159,9 @@
 
       </form>
       <button nbButton status="basic"
+              type="button"
               class="proceedButton" aria-label="Procced to next step"
+              [disabled]="this.uploadButtonBusy"
               (click)="this.initFileUpload()">
         Proceed
       </button>
@@ -169,6 +171,9 @@
       <h2>
         Your album was uploaded.
       </h2>
+
+      <p *ngIf="this.uploadSuccessful">Some files were not uploaded due to having total length
+      bigger than what you are allowed to transfer.</p>
       <button nbButton status="success" (click)="seeAlbum()"> Navigate to album </button>
     </nb-step>
   </nb-stepper>
