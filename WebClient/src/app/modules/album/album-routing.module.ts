@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import {AlbumExplorerComponent} from "./pages/album-explorer/album-explorer.component";
+import {AlbumDetailsPage} from "./pages/album-details/album-details-page.component";
 
 const routes: Routes = [{
   path: ':albumId',
-  component: AlbumExplorerComponent
+  component: AlbumDetailsPage
 }];
 
 @NgModule({

@@ -1,6 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {NewsPost} from "../../models/news-post";
 import {NewsService} from "../../../../core/services/news/news.service";
+import {SpinnerService} from "../../../../core/services/helpers/spinner.service";
 
 @Component({
   selector: 'app-latest-news-page',
@@ -15,7 +16,8 @@ export class LatestNewsPageComponent implements OnInit{
   placeholders: any[] = [];
   totalPosts: number = 10;
 
-  constructor(private newsService: NewsService) {
+  constructor(private newsService: NewsService,
+              private spinnerService: SpinnerService) {
     console.log('new instance of home service')
   }
 
@@ -34,6 +36,7 @@ export class LatestNewsPageComponent implements OnInit{
 
   }
   loadNewPosts(): void {
+    this.spinnerService.isLoading$.next(true);
     this.newsService.loadNewsPosts(this.pageToLoadNext, this.pageSize)
       .subscribe(news => {
         this.placeholders = [];
@@ -41,6 +44,7 @@ export class LatestNewsPageComponent implements OnInit{
         this.loading = false;
         this.totalPosts = news.total;
         this.pageToLoadNext++;
+        this.spinnerService.isLoading$.next(false);
       });
   }
 

@@ -38,4 +38,8 @@ export class SongPageComponent implements OnInit {
   playSong() {
     this.playerService.startPlayingSingularSong(this.dataSource);
   }
+
+  openOptions() {
+
+  }
 }

@@ -32,6 +32,13 @@ namespace WebAPI.Controllers.v1
         {
             return Ok(await mediator.Send<AlbumResponseDTO>(album));
         }
+        
+        [HttpGet("albums")]
+        public async Task<IActionResult> GetAlbumsPaginated([FromQuery] QueryAlbumsPaginatedCommand
+            queryAlbumsPaginatedCommand)
+        {
+            return Ok(await mediator.Send(queryAlbumsPaginatedCommand));
+        }
 
         [HttpGet("song")]
         public async Task<IActionResult> GetAlbumMetadata([FromQuery] GetSongDetailedInfoCommand song)
@@ -39,4 +46,5 @@ namespace WebAPI.Controllers.v1
             return Ok(await mediator.Send<SongResponseDTO>(song));
         }
     }
+    
 }

@@ -10,25 +10,22 @@ import {
   NbIconModule, NbInputModule,
   NbLayoutModule, NbMenuModule, NbProgressBarModule,
   NbSearchModule,
-  NbSidebarModule,
-  NbThemeModule, NbToastrModule, NbToastrService, NbUserModule
+  NbSidebarModule, NbToastrModule, NbToastrService, NbUserModule
 } from "@nebular/theme";
 import {NbEvaIconsModule} from "@nebular/eva-icons";
 import {RouterModule} from "@angular/router";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {PlaylistsPopupComponent} from "./components/playlists-popup/playlists-popup.component";
 import {MatDialogModule} from "@angular/material/dialog";
-import {AuthenticationService} from "../core/authentication/authentication.service";
-import {AudioService} from "../core/services/music player/audio.service";
 import {SearchService} from "../core/services/search/search.service";
-import {MusicActivityService} from "../core/services/states/music-activity.service";
-import {MediaService} from "../core/services/media/media.service";
-import {MusicPlayerControllerFacadeService} from "../core/services/music player/music-player-controller-facade.service";
-import {HeaderService} from "../core/header/header.service";
-import {NextSongService} from "../core/services/music player/next-song.service";
 import {AlbumService} from "../core/services/media/album/album.service";
 import {PlaylistsService} from "../core/services/playlists/playlists.service";
 import {SongService} from "../core/services/media/songs/song.service";
+import {SongBrowserComponent} from "./components/song-browser/song-browser.component";
+import {MatTab} from "@angular/material/tabs";
+import {MatTableModule} from "@angular/material/table";
+import {MatButtonModule} from "@angular/material/button";
+import {MatMenuModule} from "@angular/material/menu";
 
 
 @NgModule({
@@ -37,7 +34,8 @@ import {SongService} from "../core/services/media/songs/song.service";
     PlayerComponent,
     SearchbarComponent,
     PlaylistsPopupComponent,
-    HeaderComponent],
+    HeaderComponent,
+   SongBrowserComponent],
   imports: [
     CommonModule,
     NbSidebarModule.forRoot(),
@@ -59,14 +57,17 @@ import {SongService} from "../core/services/media/songs/song.service";
     RouterModule,
     FormsModule,
     ReactiveFormsModule,
-    MatDialogModule
+    MatDialogModule,
+    MatTableModule,
+    MatMenuModule
   ],
   exports: [
     LengthFormatPipe,
     PlayerComponent,
     SearchbarComponent,
     PlaylistsPopupComponent,
-    HeaderComponent
+    HeaderComponent,
+    SongBrowserComponent
   ],
   providers: [
 

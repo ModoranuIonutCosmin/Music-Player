@@ -40,7 +40,10 @@ namespace Persistence.AWS
                 Url = url
             };
         }
-
+        
+        /// <summary>
+        /// Upload a file with maximum size 2GB.
+        /// </summary>
         public async Task UploadSmallFile(MemoryStream fileStream, string fileName, string bucket, string awsAccessKey,
             string awsSecretKey)
         {

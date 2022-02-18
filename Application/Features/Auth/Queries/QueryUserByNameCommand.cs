@@ -1,11 +1,13 @@
-﻿using Domain.Entities;
+﻿using System.ComponentModel.DataAnnotations;
+using Domain.Entities;
 using MediatR;
 
 namespace Application.Features.Auth.Queries
 {
     public class QueryUserByNameCommand : IRequest<ApplicationUser>
     {
-        public string Username { get; set; }
+        [Required]
+        public string Username { get; }
 
         public QueryUserByNameCommand(string username)
         {

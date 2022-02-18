@@ -33,7 +33,7 @@ namespace Application.Features.Upload
 
         public async Task<UploadFilesResponseDTO> Handle(UploadFileCommand request, CancellationToken cancellationToken)
         {
-            long requestSize = request.FileStream.Length;
+            long requestSize = request.UploadFileStream.Length;
 
             if(requestSize >= TRANSFER_LIMIT)
             {
@@ -65,7 +65,7 @@ namespace Application.Features.Upload
            
             try
             {
-                await request.FileStream.CopyToAsync(memoryStream, cancellationToken);
+                await request.UploadFileStream.CopyToAsync(memoryStream, cancellationToken);
 
                 //TODO: -Facut servicii pentru fiecare lucru diferit
                 // -identificare tip fisier dupa header-ul din binary.

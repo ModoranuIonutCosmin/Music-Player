@@ -3,6 +3,7 @@ import {NbPosition, NbTrigger} from "@nebular/theme";
 import {AuthenticationService} from "./core/authentication/authentication.service";
 import {BehaviorSubject} from "rxjs";
 import {HeaderService} from "./core/header/header.service";
+import {SpinnerService} from "./core/services/helpers/spinner.service";
 
 @Component({
   selector: 'app-root',
@@ -12,7 +13,9 @@ import {HeaderService} from "./core/header/header.service";
 export class AppComponent {
   title = 'MusicPlayer';
 
-  constructor() {
+  isLoading$: BehaviorSubject<boolean>;
 
+  constructor(private spinnerService: SpinnerService) {
+    this.isLoading$ = spinnerService.isLoading$;
   }
 }

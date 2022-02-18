@@ -16,5 +16,6 @@ namespace Domain.Entities
         public DateTimeOffset DateAdded { get; set; }
         public List<Artist> Artists { get; set; }
         public List<Song> Songs { get; set; }
+        public List<UsersFavoriteAlbums> UsersFavorites { get; set; }
     }
 }
