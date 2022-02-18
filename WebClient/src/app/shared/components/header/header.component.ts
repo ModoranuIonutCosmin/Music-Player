@@ -1,4 +1,4 @@
-import {Component, HostListener, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild} from '@angular/core';
 import {NbMenuService, NbPosition, NbTrigger} from "@nebular/theme";
 import {BehaviorSubject} from "rxjs";
 import {AuthenticationService} from "../../../core/authentication/authentication.service";
@@ -24,13 +24,10 @@ import {Router} from "@angular/router";
     ])
   ]
 })
-export class HeaderComponent implements OnInit{
-
-
-  //header stuff
+export class HeaderComponent implements OnInit, AfterViewInit{
   exploreItems = [{title: 'Latest albums'}, {title: 'Popular'}];
   libraryItems = [{title: 'Favorite songs'}, {title: 'My playlists'}];
-  usersControlsItems = [ {title: 'Playlists'},{title: 'Profile'}, {title: 'Log out'} ];
+  usersControlsItems = [ {title: 'Profile'}, {title: 'Log out'} ];
 
   contextMenuOpenDirection: NbPosition = NbPosition.BOTTOM;
   contextMenuOpenTrigger: NbTrigger = NbTrigger.HOVER;
@@ -38,8 +35,11 @@ export class HeaderComponent implements OnInit{
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
     this.tablet = event.target.innerWidth < 1200;
-
+    console.log(this.tablet);
   }
+
+  @ViewChild('fullHeader')
+  headerElement!: ElementRef;
   overlayOpen: boolean = false;
   tablet: boolean= false;
 
@@ -47,7 +47,8 @@ export class HeaderComponent implements OnInit{
 
   constructor(private authenticationService: AuthenticationService,
               private nbMenuService: NbMenuService,
-              private router: Router) {
+              private router: Router,
+              private changeTracker: ChangeDetectorRef) {
     this.currentUser$ = this.authenticationService.user;
   }
 
@@ -58,16 +59,19 @@ export class HeaderComponent implements OnInit{
         map(({ item: { title } }) => title),
       )
       .subscribe(title => {
-        if (this.usersControlsItems[2].title === title) {
+        if (this.usersControlsItems[1].title === title) {
           this.authenticationService.logout();
         }
 
-        if (this.usersControlsItems[1].title === title) {
+        if (this.usersControlsItems[0].title === title) {
           this.router.navigate(['/profile'])
         }
       });
   }
-
+  ngAfterViewInit(): void {
+    this.tablet = this.headerElement.nativeElement.offsetWidth < 1200;
+    this.changeTracker.detectChanges();
+  }
 
   closeOverlay(): void {
     this.overlayOpen = false;
@@ -75,5 +79,7 @@ export class HeaderComponent implements OnInit{
   toggleOverlay(): void{
     this.overlayOpen = ! this.overlayOpen;
   }
+
+
 
 }

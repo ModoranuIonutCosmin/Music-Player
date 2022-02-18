@@ -23,6 +23,7 @@ namespace Persistence
             services.AddTransient<IPlaylistRepository, PlaylistRepository>();
             services.AddTransient<ISubscriptionsRepository, SubscriptionsRepository>();
             services.AddTransient<INewsRepository, NewsRepository>();
+            services.AddTransient<IFavoritesRepository, FavoritesRepository>();
         }
     }
 }

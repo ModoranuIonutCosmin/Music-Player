@@ -1,13 +1,15 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {SongInfo} from "../../../album/models/song-info";
-import {PlaylistInfo} from "../../models/playlist-info";
 import {
   MusicPlayerControllerFacadeService
 } from "../../../../core/services/music player/music-player-controller-facade.service";
 import {PlaylistsService} from "../../../../core/services/playlists/playlists.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {DurationFormatterService} from "../../../../core/services/helpers/duration-formatter.service";
+import {ToastrHelpersService} from "../../../../core/services/helpers/toastr-helpers.service";
+import {NbGlobalPhysicalPosition} from "@nebular/theme";
+import {SpinnerService} from "../../../../core/services/helpers/spinner.service";
 
 @Component({
   selector: 'app-playlist-explorer',
@@ -15,39 +17,46 @@ import {DurationFormatterService} from "../../../../core/services/helpers/durati
   styleUrls: ['./playlist-explorer.component.scss']
 })
 export class PlaylistExplorerComponent implements OnInit {
-  displayedColumns: string[] = ['position', 'coverImg', 'name', 'length', 'controls'];
   dataSource: SongInfo[] = [];
   playlistName: string = "";
-  highlightedElementIndex: number = -1;
   playlistId: string = "";
 
   constructor(private route: ActivatedRoute,
               private playerService: MusicPlayerControllerFacadeService,
               private playlistService: PlaylistsService,
               private durationFormatter: DurationFormatterService,
-              private snackbar: MatSnackBar) {
+
+              private spinnerService: SpinnerService,
+              private toastrService: ToastrHelpersService) {
   }
 
   ngOnInit(): void {
     this.playlistId = this.route.snapshot.params['playlistId'];
 
+    this.spinnerService.isLoading$.next(true);
+
     this.playlistService.loadSpecificPlaylist(this.playlistId)
       .subscribe(result => {
         this.dataSource = result.songs;
         this.playlistName = result.name;
+        this.spinnerService.isLoading$.next(false);
+      }, err =>{
+        this.spinnerService.isLoading$.next(false);
       })
   }
 
-  songPlayed(songInfo: SongInfo) {
-    console.log(songInfo);
+  playlistPlayClicked(songInfo: SongInfo) {
     this.playerService.startPlayingPlaylist(this.playlistId, songInfo);
   }
 
-  removeFromPlaylist(songId: string) {
-    this.playlistService.deleteSongFromPlaylist(this.playlistId, songId)
+  removeFromPlaylist(songInfo: SongInfo) {
+    this.playlistService.deleteSongFromPlaylist(this.playlistId, songInfo.id || '')
       .subscribe(result => {
-        this.dataSource = this.dataSource.filter(song => song.id != songId);
-        this.snackbar.open('The song was deleted!', 'Ok', {duration: 1000})
-      });
+        this.dataSource = this.dataSource.filter(song => song.id != (songInfo.id || ''));
+          this.toastrService.showMessage(NbGlobalPhysicalPosition.BOTTOM_RIGHT, 'success', 'Song was removed from the playlist succesfully');
+      },
+        err=> {
+          this.toastrService.showMessage(NbGlobalPhysicalPosition.BOTTOM_RIGHT, 'danger', 'Couldnt remove from playlist!' );
+        });
   }
 }

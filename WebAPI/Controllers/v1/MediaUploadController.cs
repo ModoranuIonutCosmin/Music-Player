@@ -23,7 +23,7 @@ namespace WebAPI.Controllers.v1
         {
             var uploadRequest = new UploadFileCommand
             {
-                FileStream = formFile.OpenReadStream(),
+                UploadFileStream = formFile.OpenReadStream(),
                 SongId = songId,
                 AlbumId = albumId,
                 AccessKey = configuration["AWSAccessKey"],

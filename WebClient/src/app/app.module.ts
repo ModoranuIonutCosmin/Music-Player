@@ -25,12 +25,12 @@ import {MusicPlayerControllerFacadeService} from "./core/services/music player/m
 import {PlaylistsPopupComponent} from './shared/components/playlists-popup/playlists-popup.component';
 import {PlaylistsService} from "./core/services/playlists/playlists.service";
 import {
-  NbThemeModule,
-  NbLayoutModule,
-  NbSidebarModule,
-  NbSearchModule,
-  NbIconModule,
-  NbContextMenuModule, NbMenuModule, NbInputModule, NbButtonModule, NbProgressBarModule, NbUserModule
+    NbThemeModule,
+    NbLayoutModule,
+    NbSidebarModule,
+    NbSearchModule,
+    NbIconModule,
+    NbContextMenuModule, NbMenuModule, NbInputModule, NbButtonModule, NbProgressBarModule, NbUserModule, NbSpinnerModule
 } from '@nebular/theme';
 import {NbEvaIconsModule} from '@nebular/eva-icons';
 import {SearchService} from "./core/services/search/search.service";
@@ -38,41 +38,44 @@ import {HeaderService} from "./core/header/header.service";
 import {NextSongService} from "./core/services/music player/next-song.service";
 import {AlbumService} from "./core/services/media/album/album.service";
 import {SharedModule} from "./shared/shared.module";
+import {SpinnerService} from "./core/services/helpers/spinner.service";
+import { ImageFallbackDirective } from './core/directives/image-fallback.directive';
 
 @NgModule({
   declarations: [
     AppComponent,
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    HttpClientModule,
-    BrowserAnimationsModule,
-    LayoutModule,
-    MatToolbarModule,
-    MatButtonModule,
-    MatSidenavModule,
-    MatIconModule,
-    MatListModule,
-    MaterialModule,
-    FormsModule,
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        HttpClientModule,
+        BrowserAnimationsModule,
+        LayoutModule,
+        MatToolbarModule,
+        MatButtonModule,
+        MatSidenavModule,
+        MatIconModule,
+        MatListModule,
+        MaterialModule,
+        FormsModule,
 
-    NbThemeModule.forRoot({name: 'dark'}),
-    NbSidebarModule.forRoot(),
-    NbLayoutModule,
-    NbEvaIconsModule,
-    NbIconModule,
-    NbSidebarModule,
-    NbSearchModule,
+        NbThemeModule.forRoot({name: 'dark'}),
+        NbSidebarModule.forRoot(),
+        NbLayoutModule,
+        NbEvaIconsModule,
+        NbIconModule,
+        NbSidebarModule,
+        NbSearchModule,
 
-    NbContextMenuModule,
-    NbMenuModule.forRoot(),
-    NbInputModule,
-    NbButtonModule,
-    NbProgressBarModule,
-    NbUserModule,
-    SharedModule
-  ],
+        NbContextMenuModule,
+        NbMenuModule.forRoot(),
+        NbInputModule,
+        NbButtonModule,
+        NbProgressBarModule,
+        NbUserModule,
+        SharedModule,
+        NbSpinnerModule
+    ],
   providers: [{
     provide: HTTP_INTERCEPTORS,
     useClass: AuthInterceptor,
@@ -89,8 +92,9 @@ import {SharedModule} from "./shared/shared.module";
     MusicActivityService,
     MediaService,
     NextSongService,
+    SpinnerService
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule {
 }

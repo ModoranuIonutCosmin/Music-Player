@@ -6,6 +6,7 @@ export enum ApiPaths {
 
   albumInfoGet = "/mediaMetadata/album",
   songInfoGet = "/mediaMetadata/song",
+  albumsListGet = "/mediaMetadata/albums",
 
   searchResultsGet = "/mediaSearch/search",
 
@@ -23,5 +24,9 @@ export enum ApiPaths {
   profileInfo = "/UserProfile/profile",
   profileSubcriptionUpgrade = "/UserProfile/subscriptions/upgrade",
 
-  newsPosts = "/News/latest"
+  newsPosts = "/News/latest",
+
+  checkFavoriteStatus= "/Favorites/checkFavorite",
+  addToFavorite = "/Favorites/add",
+  deleteFromFavorite = "/Favorites/delete"
 }

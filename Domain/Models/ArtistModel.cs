@@ -5,7 +5,6 @@
         public string ArtistName { get; set; }
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
-
         public override bool Equals(object obj)
         {
             return obj is ArtistModel model &&

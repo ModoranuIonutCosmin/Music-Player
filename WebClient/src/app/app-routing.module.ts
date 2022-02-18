@@ -3,6 +3,10 @@ import {RouterModule, Routes} from '@angular/router';
 
 const routes: Routes = [
   {
+    path: '',
+    loadChildren: () => import('./modules/home/home.module').then(m => m.HomeModule)
+  },
+  {
     path: 'home',
     loadChildren: () => import('./modules/home/home.module').then(m => m.HomeModule)
   },
@@ -11,12 +15,12 @@ const routes: Routes = [
     loadChildren: () => import('./modules/auth/auth.module').then(m => m.AuthModule)
   },
   {
-    path: 'dashboard',
-    loadChildren: () => import('./modules/dashboard/dashboard.module').then(m => m.DashboardModule)
-  },
-  {
     path: 'album',
     loadChildren: () => import('./modules/album/album.module').then(m => m.AlbumModule)
+  },
+  {
+    path: 'explorer',
+    loadChildren: () => import('./modules/explorer/explorer.module').then(m => m.ExplorerModule)
   },
   {
     path: 'song',
@@ -38,6 +42,7 @@ const routes: Routes = [
     path: 'profile',
     loadChildren: () => import('./modules/profile/profile.module').then(m => m.ProfileModule)
   },
+
 ];
 
 @NgModule({
