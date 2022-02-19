@@ -11,7 +11,25 @@ namespace Persistence
     {
         public static void AddPersistence(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext<MediaPlayerContext>(options => options.UseSqlServer(configuration.GetConnectionString("MyConnection"), b => b.MigrationsAssembly(typeof(MediaPlayerContext).Assembly.FullName)));
+            services.AddDbContext<MediaPlayerContext>(options =>
+            {
+                var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+
+                if (environment == "Development")
+                {
+                    options.UseSqlServer(configuration.GetConnectionString("MyConnection"),
+                        b => b.MigrationsAssembly(typeof(MediaPlayerContext).Assembly.FullName));
+                }
+                else
+                {
+                    //Production
+                    var connectionUrl = Environment.GetEnvironmentVariable("AZURESQLDB_URL");
+
+                    options.UseSqlServer(connectionUrl);
+                }
+                
+
+            });
             
             // register implementations related to repository/generic implementation
             services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
