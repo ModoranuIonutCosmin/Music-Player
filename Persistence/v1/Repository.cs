@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces;
 using Domain.Common;
+using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Context;
 
@@ -7,11 +8,11 @@ namespace Persistence.v1
 {
     public class Repository<TEntity> : IRepository<TEntity> where TEntity : BaseEntity
     {
-        protected readonly MediaPlayerContext context;
+        protected readonly MediaPlayerContext Context;
 
         public Repository(MediaPlayerContext context)
         {
-            this.context = context;
+            this.Context = context;
         }
         public async Task<TEntity> AddAsync(TEntity entity)
         {
@@ -19,8 +20,8 @@ namespace Persistence.v1
             {
                 throw new ArgumentNullException(nameof(entity), $"{nameof(AddAsync)} entity must not be null");
             }
-            await context.AddAsync(entity);
-            await context.SaveChangesAsync();
+            await Context.AddAsync(entity);
+            await Context.SaveChangesAsync();
             return entity;
         }
 
@@ -31,14 +32,14 @@ namespace Persistence.v1
                 throw new ArgumentNullException(nameof(entity), $"{nameof(DeleteAsync)} entity mult not be null");
             }
 
-            context.Remove(entity);
-            await context.SaveChangesAsync();
+            Context.Remove(entity);
+            await Context.SaveChangesAsync();
             return entity;
         }
 
         public async Task<IEnumerable<TEntity>> GetAllAsync()
         {
-            return await context.Set<TEntity>().ToListAsync();
+            return await Context.Set<TEntity>().ToListAsync();
         }
 
         public async Task<TEntity> GetByIdAsync(Guid id)
@@ -48,7 +49,7 @@ namespace Persistence.v1
                 throw new ArgumentException($"{nameof(GetByIdAsync)} id must not be empty");
             }
 
-            return await context.FindAsync<TEntity>(id);
+            return await Context.FindAsync<TEntity>(id);
         }
 
         public async Task<TEntity> UpdateAsync(TEntity entity)
@@ -58,9 +59,10 @@ namespace Persistence.v1
                 throw new ArgumentNullException(nameof(entity), $"{nameof(UpdateAsync)} entity must not be null");
             }
 
-            context.Update(entity);
-            await context.SaveChangesAsync();
+            Context.Update(entity);
+            await Context.SaveChangesAsync();
             return entity;
         }
+        
     }
 }

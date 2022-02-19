@@ -11,6 +11,10 @@ namespace Persistence.Context
         public DbSet<Album> Albums { get; set; }
         public DbSet<Playlist> Playlists { get; set; }
         public DbSet<Storage> StorageInfo { get; set; }
+        
+        public DbSet<Subscription> Subscriptions { get; set; }
+        public DbSet<NewsPost> News { get; set; }
+        public DbSet<UsersFavoriteAlbums> UsersFavoriteAlbums { get; set; }
 
         public MediaPlayerContext()
         {
@@ -25,7 +29,23 @@ namespace Persistence.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<ApplicationUser>()
+                .HasOne<Subscription>(u => u.Subscription)
+                .WithOne(s => s.ApplicationUser)
+                .HasForeignKey<Subscription>(u => u.ApplicationUserId);
+
+            modelBuilder.Entity<UsersFavoriteAlbums>()
+                .HasAlternateKey(pk => new {pk.AlbumId, pk.ApplicationUserId});
+
+            modelBuilder.Entity<UsersFavoriteAlbums>()
+                .HasOne<Album>(uf => uf.Album)
+                .WithMany(a => a.UsersFavorites)
+                .HasForeignKey(uf => uf.AlbumId);
+            
+            modelBuilder.Entity<UsersFavoriteAlbums>()
+                .HasOne<ApplicationUser>(uf => uf.ApplicationUser)
+                .WithMany(u => u.UsersFavorites)
+                .HasForeignKey(uf => uf.ApplicationUserId);
         }
 
         public async Task<int> SaveChangesAsync()
@@ -35,7 +55,7 @@ namespace Persistence.Context
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsbuilder)
         {
-            optionsbuilder.UseSqlServer("Data Source=.\\SQLEXPRESS;Database=Onion;Integrated Security=True");
+            optionsbuilder.UseSqlServer("Data Source=.\\SQLEXPRESS;Database=Player;Integrated Security=True");
         }
     }
 }

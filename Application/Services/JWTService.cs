@@ -44,7 +44,8 @@ namespace Application.Services.Implementation
             return new()
             {
                 JwtToken = _jwtSecurityTokenHandler.WriteToken(token),
-                Expires = expires
+                Expires = expires,
+                UserName = userInfo.UserName
             };
         }
         public string ValidateToken(string token)

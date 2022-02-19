@@ -17,7 +17,18 @@ namespace Persistence.v1
             if (string.IsNullOrEmpty(username))
                 throw new ArgumentNullException(nameof(username), $"Username can't be null");
 
-            return await context.Users.Where(user => user.UserName == username)
+            return await Context.Users.Where(user => user.UserName == username)
+                .FirstOrDefaultAsync();
+        }
+        
+        public async Task<ApplicationUser> GetByUsernameSubscriptionAsync(string username)
+        {
+            if (string.IsNullOrEmpty(username))
+                throw new ArgumentNullException(nameof(username), $"Username can't be null");
+
+            return await Context.Users
+                .Where(user => user.UserName == username)
+                    .Include(u => u.Subscription)
                 .FirstOrDefaultAsync();
         }
 
@@ -28,7 +39,7 @@ namespace Persistence.v1
                 throw new ArgumentNullException(nameof(email), $"Email can't be null");
             }
 
-            return await context.Users.FirstOrDefaultAsync(user => user.Email == email);
+            return await Context.Users.FirstOrDefaultAsync(user => user.Email == email);
         }
     }
 }

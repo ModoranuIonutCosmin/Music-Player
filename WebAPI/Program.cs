@@ -12,6 +12,7 @@ using Persistence.AWS;
 using System.Net;
 using System.Reflection;
 using System.Text;
+using System.Text.Json.Serialization;
 using WebAPI.Exceptions.ProblemDetailsHelpers;
 using WebAPI.Middleware;
 
@@ -29,7 +30,6 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
 
 //cors 
 builder.Services.AddCors(options =>
@@ -50,6 +50,7 @@ builder.Services.AddApplication();
 builder.Services.AddTransient<IEmailSyntaxValidator, EmailSyntaxValidator>();
 builder.Services.AddTransient<IPasswordHashGenerator, PasswordHashGenerator>();
 builder.Services.AddTransient<IRemoteDiskStorageService, AwsS3Service>();
+builder.Services.AddTransient<ISubscriptionsService, SubscriptionsService>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
@@ -124,6 +125,7 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 });
+
 
 var app = builder.Build();
 

@@ -20,9 +20,18 @@ namespace Domain.Entities
         [Required]
         [MaxLength(130)]
         public string PasswordHash { get; set; }
+        
+        [Required]
+        [MaxLength(130)]
+        public string Salt { get; set; }
 
         [Required]
         [MaxLength(100)]
         public string Email { get; set; }
+        
+        public List<Playlist> Playlists { get; set; }
+        public Subscription Subscription { get; set; }
+        
+        public List<UsersFavoriteAlbums> UsersFavorites { get; set; }
     }
 }

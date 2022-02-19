@@ -6,5 +6,6 @@ namespace Application.Interfaces
     {
         Task<ApplicationUser> GetByEmail(string email);
         Task<ApplicationUser> GetByUsernameAsync(string username);
+        Task<ApplicationUser> GetByUsernameSubscriptionAsync(string username);
     }
 }

@@ -21,6 +21,9 @@ namespace Persistence
             services.AddTransient<IStorageInfoRepository, StorageInfoRepository>();
             services.AddTransient<IArtistRepository, ArtistRepository>();
             services.AddTransient<IPlaylistRepository, PlaylistRepository>();
+            services.AddTransient<ISubscriptionsRepository, SubscriptionsRepository>();
+            services.AddTransient<INewsRepository, NewsRepository>();
+            services.AddTransient<IFavoritesRepository, FavoritesRepository>();
         }
     }
 }

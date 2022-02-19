@@ -7,12 +7,6 @@ export const environment = {
   baseUrl: "https://localhost:7025/api/1.0"
 };
 
-export enum ApiPaths {
-  loginService = "/login",
-  registerService = "/register",
-  mediaService = "/media"
-}
-
 /*
  * For easier debugging in development mode, you can import the following file
  * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.

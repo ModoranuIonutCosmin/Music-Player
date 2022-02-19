@@ -1,18 +1,23 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {Observable} from "rxjs";
+import {BehaviorSubject, Observable} from "rxjs";
 import {LoginResponse} from "./models/login-response";
-import {ApiPaths, environment} from "../../../environments/environment";
+import {environment} from "../../../environments/environment";
 import {LoginRequest} from "./models/login-request";
-import {shareReplay, tap} from "rxjs/operators";
+import {flatMap, shareReplay, tap} from "rxjs/operators";
 import {RegisterRequest} from "./models/register-request";
 import {RegisterResponse} from "./models/register-response";
+import {ApiPaths} from "../../../environments/apiPaths";
 
 @Injectable()
 export class AuthenticationService {
+  user: BehaviorSubject<string> = new BehaviorSubject<string>('');
 
   constructor(private httpClient: HttpClient) {
 
+    if (this.isLoggedIn()) {
+      this.user.next(this.getUsername());
+    }
   }
 
   public login(username: string, password: string): Observable<LoginResponse> {
@@ -21,15 +26,17 @@ export class AuthenticationService {
       password: password
     }
 
-    console.log(environment.baseUrl)
     return this.httpClient
       .post<LoginResponse>(environment.baseUrl + ApiPaths.loginService,
         loginRequest)
-      .pipe(tap(res => AuthenticationService.setSession(res)),
+      .pipe(tap(res => {
+        AuthenticationService.setSession(res);
+        this.user.next(res.userName);
+      }),
         shareReplay());
   }
 
-  public register(registerRequest : RegisterRequest) {
+  public register(registerRequest: RegisterRequest) {
     return this.httpClient
       .post<RegisterResponse>(environment.baseUrl + ApiPaths.registerService,
         registerRequest)
@@ -42,22 +49,31 @@ export class AuthenticationService {
 
     localStorage.setItem('id_token', loginResponse.jwtToken);
     localStorage.setItem("expires_at", expiresAt.toString());
+    localStorage.setItem("userNonce", JSON.stringify({userName: loginResponse.userName}));
   }
 
   public isLoggedIn() {
-    const today = new Date();
 
-    return this.getExpiration() >= today
+    return !!localStorage.getItem('id_token') && !!localStorage.getItem('expires_at');
   }
 
-  getExpiration() : Date {
+  getExpiration(): Date {
     const expiration = localStorage.getItem("expires_at") ?? "";
 
     return new Date(expiration);
   }
 
+  getUsername(): string {
+
+    let userPublicData: string = localStorage.getItem("userNonce")  || '{}';
+
+    return JSON.parse(userPublicData).userName;
+  }
+
+
   logout() {
     localStorage.removeItem("id_token");
     localStorage.removeItem("expires_at");
+    this.user.next('');
   }
 }

@@ -1,31 +1,39 @@
-﻿using Application.Interfaces;
+﻿using Application.Audio_File_Tagging;
+using Application.Interfaces;
+using Application.Services;
 using Domain.Entities;
 using Domain.Exceptions;
 using Domain.Models;
 using MediatR;
+using static TagLib.File;
 
 namespace Application.Features.Upload
 {
     public class UploadFileCommandHandler : IRequestHandler<UploadFileCommand, UploadFilesResponseDTO>
     {
-        public const int TRANSFER_LIMIT = 6_000_000;
+        public const int TRANSFER_LIMIT = 100_000_000;
         private readonly IRemoteDiskStorageService diskStorageService;
         private readonly IAlbumRepository albumRepository;
         private readonly IStorageInfoRepository storageInfoRepository;
+        private readonly ISongRepository songRepository;
+        private readonly ISubscriptionsService _subscriptionsService;
 
         public UploadFileCommandHandler(IRemoteDiskStorageService diskStorageService,
             IAlbumRepository albumRepository,
-            IStorageInfoRepository storageInfoRepository)
+            IStorageInfoRepository storageInfoRepository,
+            ISongRepository songRepository,
+            ISubscriptionsService subscriptionsService)
         {
             this.diskStorageService = diskStorageService;
             this.albumRepository = albumRepository;
             this.storageInfoRepository = storageInfoRepository;
+            this.songRepository = songRepository;
+            _subscriptionsService = subscriptionsService;
         }
 
         public async Task<UploadFilesResponseDTO> Handle(UploadFileCommand request, CancellationToken cancellationToken)
         {
-            long requestSize = request.FileStream.Length;
-            long uploadedSize = 0;
+            long requestSize = request.UploadFileStream.Length;
 
             if(requestSize >= TRANSFER_LIMIT)
             {
@@ -41,7 +49,12 @@ namespace Application.Features.Upload
 
             Guid newSongId = request.SongId;
 
-            var storageInfo = await storageInfoRepository.GetByIdAsync(newSongId);
+            if (newSongId == Guid.Empty || await songRepository.GetByIdAsync(newSongId) == null)
+            {
+                throw new ArgumentException($"{nameof(request.SongId)} invalid!");
+            }
+
+            var storageInfo = await storageInfoRepository.FindBySongId(newSongId);
 
             if (storageInfo != null)
             {
@@ -49,22 +62,45 @@ namespace Application.Features.Upload
             }
 
             var memoryStream = new MemoryStream();
-
+           
             try
             {
-                uploadedSize += memoryStream.Length;
+                await request.UploadFileStream.CopyToAsync(memoryStream, cancellationToken);
 
-                await request.FileStream.CopyToAsync(memoryStream, cancellationToken);
+                //TODO: -Facut servicii pentru fiecare lucru diferit
+                // -identificare tip fisier dupa header-ul din binary.
+
+                //Tagging
+                memoryStream = new MemoryStream(memoryStream.ToArray());
+
+                IFileAbstraction file = new SimpleAudioFileAbstraction(new SimpleAudioFile("file", memoryStream));
+
+                var audioFileProperties = Create(file, "audio/mp3", TagLib.ReadStyle.Average);
+                long songDuration = audioFileProperties?.Properties?.Duration.Ticks ?? 0;
+                decimal songDurationMinutes = songDuration / 600_000_000m;
+                var extension = "mp3";
+                //
+
+                if (!this._subscriptionsService.UserHasEnoughMinutesForUpload(request.UserRequestingId,
+                        songDurationMinutes))
+                {
+                    throw new TransferTooLargeException($"Your subscription doesn't support uploading files this large.");
+                }
 
                 await diskStorageService.UploadSmallFile(memoryStream, "songs/" + newSongId, request.Bucket,
                     request.AccessKey, request.SecretKey);
-
+                
                 await storageInfoRepository.AddAsync(new Storage()
                 {
-                    SongId = newSongId.ToString(),
+                    SongId = newSongId,
                     Path = $"songs/{newSongId}",
-                    Size = uploadedSize
+                    Size = requestSize,
+                    Extension = extension
                 });
+
+                await _subscriptionsService.DeductUserMinutes(request.UserRequestingId, songDurationMinutes);
+                await songRepository.SetSongDuration(newSongId, songDuration);
+                await songRepository.SetSongDateAdded(newSongId, DateTimeOffset.UtcNow);
             }
 
             finally
@@ -74,7 +110,7 @@ namespace Application.Features.Upload
              
             return new UploadFilesResponseDTO
             {
-                TotalBytesSize = uploadedSize
+                TotalBytesSize = requestSize
             };
         }
     }

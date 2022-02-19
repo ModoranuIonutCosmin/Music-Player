@@ -23,18 +23,16 @@ namespace WebAPI.Controllers.v1
         {
             var uploadRequest = new UploadFileCommand
             {
-                FileStream = formFile.OpenReadStream(),
+                UploadFileStream = formFile.OpenReadStream(),
                 SongId = songId,
                 AlbumId = albumId,
                 AccessKey = configuration["AWSAccessKey"],
                 Bucket = configuration["DefaultBucket"],
                 SecretKey = configuration["AWSSecretKey"],
-                UserRequestingId = (Request.HttpContext.Items["User"] as ApplicationUser).Id
+                UserRequestingId = (Request.HttpContext.Items["User"] as Domain.Entities.ApplicationUser).Id
             };
 
             return Ok(await mediator.Send(uploadRequest));
         }
-
-        
     }
 }
