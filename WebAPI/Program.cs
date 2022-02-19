@@ -42,7 +42,8 @@ builder.Services.AddCors(options =>
             builder.AllowAnyMethod();
         });
 });
-// add dependencies
+
+// add dependencies -> database provider based on dev/production
 builder.Services.AddPersistence(builder.Configuration);
 builder.Services.AddApplication();
 

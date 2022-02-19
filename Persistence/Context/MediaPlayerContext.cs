@@ -52,10 +52,5 @@ namespace Persistence.Context
         {
             return await base.SaveChangesAsync();
         }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsbuilder)
-        {
-            optionsbuilder.UseSqlServer("Data Source=.\\SQLEXPRESS;Database=Player;Integrated Security=True");
-        }
     }
 }
