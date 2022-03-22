@@ -10,15 +10,15 @@ A web software solution that allows users to:
 
 ## Demo
 A *short* summary of all features is presented in the video below.
-If you want to try the app yourself you can access [this](http://player.modoranuc.ml) deployed version which
+If you want to try the app yourself you can access [this](https://bit.ly/3itTdgA) deployed version which
 may be slow at first operation due to it being hosted on a free development deployment slot,
 app having to cold-start.
 
 See the video below:
 
-[![Demo](http://i.imgur.com/3XNG8t5.png)](http://www.youtube.com/watch?v=epNrR6uApxU "WebAMP")
+[![Demo](http://i.imgur.com/3XNG8t5.png)](https://bit.ly/3JBkJVu "WebAMP")
 
-Alt: [click](http://www.youtube.com/watch?v=epNrR6uApxU)
+Alt: [click](https://bit.ly/3JBkJVu)
 
 ## Technologies
 
