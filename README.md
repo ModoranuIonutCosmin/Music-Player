@@ -3,16 +3,22 @@
 
 ## Summary
 A web software solution that allows users to:
-* Listen to music, just like on an app like Soundcloud
-* Upload .mp3 music albums and share those with other people
-* Manage their playlist and add songs to favorites
+* Listen to music, just like on an app like Soundcloud / Spotify.
+* Upload .mp3 music albums and share those with other people.
+* Manage their playlist and add songs to favorites.
 * Upgrade their subscription for getting bonus upload minutes.
 
 ## Demo
 A *short* summary of all features is presented in the video below.
-If you want to try the app yourself you can access _this_ deployed version which
+If you want to try the app yourself you can access [this](http://player.modoranuc.ml) deployed version which
 may be slow at first operation due to it being hosted on a free development deployment slot,
 app having to cold-start.
+
+See the video below:
+
+[![Demo](http://i.imgur.com/3XNG8t5.png)](http://www.youtube.com/watch?v=epNrR6uApxU "WebAMP")
+
+Alt: [click](http://www.youtube.com/watch?v=epNrR6uApxU)
 
 ## Technologies
 
@@ -28,16 +34,16 @@ app having to cold-start.
 
 ## Architecture
 * WebAPI hosted on Azure App service
-* Azure SQL
+* Azure SQL \w MS SQL SERVER
 * Angular app on Azure Static Web app service.
 
 ### Back end
-Backend is structured to Onion (Clean architecture) + using MediatR:
+Backend is structured according to Onion (Clean architecture) and mediator pattern using MediatR:
 * Domain project 
   - entities.
   - DTOs.
   - exceptions.
-  - helpers.
+  - helpers - extension methods, general functionality used in every layer.
 
 * Application layer:
   - a features folder where logic resides, for each functionality there exists a command and a command handler 
@@ -62,4 +68,5 @@ Using a highly scalable standard folder structure.
 * Shared module for models and common components.
 * All specific components are organized in modules.
   - lazy loading modules for reducing bundle size.
-
+* Interceptors for exceptions handling (like API not responding for announcing user of the service unavailability),
+retry interceptor for retrying failed status code 0 http calls, auth interceptor / unauthorized interceptor to rewrite requests to include user jwt token / redirect to login on token expiration or 401 reponse from any API call
